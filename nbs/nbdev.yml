@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "bifrost_bridge"
+  site-url: "https://$GIT_USER_NAME.github.io/bifrost_bridge"
+  description: "TODO"
+  repo-branch: main
+  repo-url: "https://github.com/$GIT_USER_NAME/bifrost_bridge"
