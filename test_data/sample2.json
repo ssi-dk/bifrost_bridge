@@ -1,0 +1,272 @@
+[
+  {
+    "id": "66f6a9e348d6bee81abaad20",
+    "index": 0,
+    "guid": "3de41c5b-595e-4467-8d25-0827683f2b11",
+    "isActive": false,
+    "balance": "$3,667.17",
+    "picture": "http://placehold.it/32x32",
+    "age": 25,
+    "eyeColor": "green",
+    "name": "Claudia Gardner",
+    "gender": "female",
+    "company": "IDETICA",
+    "email": "claudiagardner@idetica.com",
+    "phone": "+1 (930) 500-3844",
+    "address": "673 Coleridge Street, Fairhaven, Oklahoma, 8368",
+    "about": "Adipisicing occaecat nostrud sint sint. Labore cillum minim aute do nulla irure exercitation laborum. Reprehenderit pariatur excepteur laboris voluptate ex mollit ipsum. Sit anim dolore commodo ipsum cupidatat enim aliquip nulla culpa enim sit. Nostrud consectetur ut consequat velit sit nostrud duis culpa adipisicing culpa occaecat.\r\n",
+    "registered": "2023-12-12T06:33:32 -01:00",
+    "latitude": -13.219736,
+    "longitude": -141.937562,
+    "tags": [
+      "do",
+      "voluptate",
+      "esse",
+      "ex",
+      "nostrud",
+      "sint",
+      "minim"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Whitfield Galloway"
+      },
+      {
+        "id": 1,
+        "name": "Fitzpatrick Alston"
+      },
+      {
+        "id": 2,
+        "name": "Alma Noble"
+      }
+    ],
+    "greeting": "Hello, Claudia Gardner! You have 8 unread messages.",
+    "favoriteFruit": "banana"
+  },
+  {
+    "id": "66f6a9e3feb7c92210e352c8",
+    "index": 1,
+    "guid": "5dc69b61-d2aa-48d1-9d21-d95c77d517d3",
+    "isActive": true,
+    "balance": "$1,325.67",
+    "picture": "http://placehold.it/32x32",
+    "age": 28,
+    "eyeColor": "green",
+    "name": "Robbins Barker",
+    "gender": "male",
+    "company": "NORSUL",
+    "email": "robbinsbarker@norsul.com",
+    "phone": "+1 (873) 504-2211",
+    "address": "111 Oriental Court, Germanton, Alaska, 6346",
+    "about": "Dolor deserunt est magna velit dolore id sit aliqua. Exercitation nisi aute qui ex dolore eu. Aute laboris sunt qui ut non aliqua ipsum ad do commodo proident est dolor veniam. Ipsum duis et et eu eu occaecat pariatur nulla exercitation duis amet dolor consequat esse. Nostrud aute sint laboris ut cillum. Consequat ea Lorem id adipisicing id sit minim elit voluptate.\r\n",
+    "registered": "2016-06-19T07:43:05 -02:00",
+    "latitude": -42.993642,
+    "longitude": 124.559595,
+    "tags": [
+      "magna",
+      "commodo",
+      "adipisicing",
+      "cillum",
+      "esse",
+      "ullamco",
+      "nisi"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Simone Walker"
+      },
+      {
+        "id": 1,
+        "name": "Chaney King"
+      },
+      {
+        "id": 2,
+        "name": "Welch Christian"
+      }
+    ],
+    "greeting": "Hello, Robbins Barker! You have 2 unread messages.",
+    "favoriteFruit": "banana"
+  },
+  {
+    "id": "66f6a9e3409631c0f48c60e4",
+    "index": 2,
+    "guid": "1997bf6a-0136-4e79-a860-1fa148039fe7",
+    "isActive": false,
+    "balance": "$1,485.09",
+    "picture": "http://placehold.it/32x32",
+    "age": 20,
+    "eyeColor": "green",
+    "name": "Ella Booker",
+    "gender": "female",
+    "company": "EXTREMO",
+    "email": "ellabooker@extremo.com",
+    "phone": "+1 (918) 452-2850",
+    "address": "316 Homecrest Avenue, Ogema, Tennessee, 5327",
+    "about": "Deserunt consectetur sit fugiat aute sint qui et sunt incididunt pariatur esse sunt. Sint ea irure cillum do ipsum reprehenderit pariatur nisi mollit. Cupidatat ad mollit sint officia ad esse ex velit laboris esse ipsum quis nulla.\r\n",
+    "registered": "2024-02-13T05:35:54 -01:00",
+    "latitude": 65.040704,
+    "longitude": 22.436937,
+    "tags": [
+      "cupidatat",
+      "ullamco",
+      "labore",
+      "laboris",
+      "ea",
+      "sint",
+      "cillum"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Mejia Potts"
+      },
+      {
+        "id": 1,
+        "name": "Goodman Wilkins"
+      },
+      {
+        "id": 2,
+        "name": "Clarice Caldwell"
+      }
+    ],
+    "greeting": "Hello, Ella Booker! You have 1 unread messages.",
+    "favoriteFruit": "strawberry"
+  },
+  {
+    "id": "66f6a9e35f60f3d007e9084c",
+    "index": 3,
+    "guid": "7e9b8e7c-f83c-4c4c-a69c-2583625b4699",
+    "isActive": true,
+    "balance": "$1,956.26",
+    "picture": "http://placehold.it/32x32",
+    "age": 23,
+    "eyeColor": "brown",
+    "name": "Margaret Hodges",
+    "gender": "female",
+    "company": "NEXGENE",
+    "email": "margarethodges@nexgene.com",
+    "phone": "+1 (848) 410-2646",
+    "address": "220 Olive Street, Whitehaven, Montana, 1570",
+    "about": "Nostrud proident aute laborum incididunt nulla ad sunt eu sint reprehenderit. Deserunt ut est qui magna amet adipisicing commodo aliqua tempor cupidatat eu. Ullamco veniam duis amet ullamco esse minim ullamco adipisicing occaecat nisi do ea officia. Laborum mollit minim quis ut irure non amet consequat mollit ipsum duis ut ut. Duis in fugiat labore velit occaecat. Pariatur tempor sint tempor ex labore ad ipsum tempor. Culpa id velit ex culpa tempor fugiat.\r\n",
+    "registered": "2023-11-09T10:25:40 -01:00",
+    "latitude": -42.262349,
+    "longitude": -0.802038,
+    "tags": [
+      "et",
+      "consequat",
+      "id",
+      "ad",
+      "voluptate",
+      "in",
+      "pariatur"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Reeves Sharpe"
+      },
+      {
+        "id": 1,
+        "name": "Claire Wilkinson"
+      },
+      {
+        "id": 2,
+        "name": "Kari Hammond"
+      }
+    ],
+    "greeting": "Hello, Margaret Hodges! You have 4 unread messages.",
+    "favoriteFruit": "banana"
+  },
+  {
+    "id": "66f6a9e35594eeaaeb6d4762",
+    "index": 4,
+    "guid": "bc7bd942-e2fe-4464-886b-2f76a42310ce",
+    "isActive": true,
+    "balance": "$3,933.71",
+    "picture": "http://placehold.it/32x32",
+    "age": 31,
+    "eyeColor": "green",
+    "name": "Miranda Holcomb",
+    "gender": "female",
+    "company": "RAMJOB",
+    "email": "mirandaholcomb@ramjob.com",
+    "phone": "+1 (842) 532-3243",
+    "address": "200 Terrace Place, Nelson, Arkansas, 5210",
+    "about": "Aliquip dolor amet adipisicing aliqua consectetur. Irure consectetur velit aliquip ea consequat. Dolore ut proident esse consequat aute sint incididunt non incididunt ipsum. Excepteur culpa pariatur cillum mollit nulla labore aute amet ex.\r\n",
+    "registered": "2015-10-24T10:34:22 -02:00",
+    "latitude": 32.978476,
+    "longitude": -140.255495,
+    "tags": [
+      "ea",
+      "elit",
+      "dolore",
+      "mollit",
+      "id",
+      "quis",
+      "sint"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Cook Griffith"
+      },
+      {
+        "id": 1,
+        "name": "Harding Cohen"
+      },
+      {
+        "id": 2,
+        "name": "Fanny Bowman"
+      }
+    ],
+    "greeting": "Hello, Miranda Holcomb! You have 9 unread messages.",
+    "favoriteFruit": "apple"
+  },
+  {
+    "id": "66f6a9e34f984b5389243d4a",
+    "index": 5,
+    "guid": "81dacdea-fb28-4ec9-a356-23e50fbc79b2",
+    "isActive": false,
+    "balance": "$2,043.44",
+    "picture": "http://placehold.it/32x32",
+    "age": 33,
+    "eyeColor": "brown",
+    "name": "Fleming Lane",
+    "gender": "male",
+    "company": "EXIAND",
+    "email": "fleminglane@exiand.com",
+    "phone": "+1 (957) 451-3918",
+    "address": "735 Randolph Street, Moquino, Idaho, 1188",
+    "about": "Nisi elit voluptate excepteur incididunt nostrud proident. Adipisicing consectetur minim esse exercitation ipsum ut Lorem est eu laboris Lorem exercitation. Eu anim aliqua consectetur esse duis in voluptate ea sit eu mollit reprehenderit anim tempor. Eu irure dolore eu eu dolor commodo commodo id Lorem amet sint enim pariatur proident. Ullamco proident voluptate laboris incididunt laborum adipisicing exercitation cupidatat nostrud Lorem. Proident incididunt commodo eiusmod tempor aliquip et pariatur in.\r\n",
+    "registered": "2024-07-06T11:38:35 -02:00",
+    "latitude": 12.6032,
+    "longitude": -91.063277,
+    "tags": [
+      "fugiat",
+      "esse",
+      "voluptate",
+      "irure",
+      "fugiat",
+      "nostrud",
+      "aliquip"
+    ],
+    "friends": [
+      {
+        "id": 0,
+        "name": "Mendoza Chambers"
+      },
+      {
+        "id": 1,
+        "name": "Marianne Huff"
+      },
+      {
+        "id": 2,
+        "name": "French Garrett"
+      }
+    ],
+    "greeting": "Hello, Fleming Lane! You have 3 unread messages.",
+    "favoriteFruit": "banana"
+  }
+]

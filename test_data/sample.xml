@@ -1,0 +1,17 @@
+<root>
+<item>
+  <Name>Alice</Name>
+  <Age>25</Age>
+  <Gender>F</Gender>
+</item>
+<item>
+  <Name>Bob</Name>
+  <Age>30</Age>
+  <Gender>M</Gender>
+</item>
+<item>
+  <Name>Charlie</Name>
+  <Age>35</Age>
+  <Gender>M</Gender>
+</item>
+</root>

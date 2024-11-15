@@ -2,7 +2,9 @@
 
 # %% auto 0
 __all__ = ['PACKAGE_NAME', 'DEV_MODE', 'PACKAGE_DIR', 'PROJECT_DIR', 'config', 'set_env_variables', 'get_config',
-           'show_project_env_vars', 'get_samplesheet', 'hello_world', 'cli']
+           'show_project_env_vars', 'get_samplesheet', 'hello_world', 'cli', 'DataFrame', 'import_nested_json_data',
+           'export_nested_json_data', 'import_nested_xml_data', 'export_nested_xml_data', 'import_data',
+           'rename_header', 'filter_columns', 'filter_rows', 'export_data', 'print_header', 'show']
 
 # %% ../nbs/00_core.ipynb 4
 # Need the bifrost_bridge for a few functions, this can be considered a static var
@@ -207,3 +209,341 @@ def cli(
         config["example"]["input"]["name"] = name
 
     print(hello_world(config["example"]["input"]["name"]))
+
+# %% ../nbs/00_core.ipynb 32
+import json
+import pandas as pd
+import json
+import yaml
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
+# %% ../nbs/00_core.ipynb 34
+class DataFrame:
+    def __init__(self, data=None):
+        """
+        Initialize the DataFrame object.
+        :param data: Optional initial data for the DataFrame.
+        """
+        if data is not None:
+            self.df = pd.DataFrame(data)
+        else:
+            self.df = pd.DataFrame()
+
+# %% ../nbs/00_core.ipynb 36
+def import_nested_json_data(self, json_file_path):
+    """
+    Import nested JSON data from a file and create headers by combining headers with underscores.
+    :param json_file_path: Path to the JSON file.
+    """
+
+    with open(json_file_path, "r") as file:
+        nested_json = json.load(file)
+
+    def flatten_json(y):
+        out = {}
+
+        def flatten(x, name=""):
+            if type(x) is dict:
+                for a in x:
+                    flatten(x[a], name + a + "£")
+            elif type(x) is list:
+                i = 1  # Start numbering from 1
+                for a in x:
+                    flatten(a, name + str(i) + "£")
+                    i += 1
+            else:
+                out[name[:-1]] = x
+
+        flatten(y)
+        return out
+
+    if isinstance(nested_json, list):
+        flat_data = [flatten_json(item) for item in nested_json]
+        self.df = pd.json_normalize(flat_data)
+    else:
+        flat_data = flatten_json(nested_json)
+        self.df = pd.json_normalize(flat_data)
+
+
+def export_nested_json_data(self, json_file_path):
+    """
+    Export the DataFrame to a nested JSON file by unraveling headers with underscores.
+    :param json_file_path: Path to the JSON file.
+    """
+
+    def unflatten_json(flat_dict):
+        out = {}
+
+        for key, value in flat_dict.items():
+            keys = key.split("£")
+            d = out
+            for k in keys[:-1]:
+                d = d.setdefault(k, {})
+            d[keys[-1]] = value
+        return out
+
+    nested_json_list = [
+        unflatten_json(row) for row in self.df.to_dict(orient="records")
+    ]
+
+    def convert_to_list(d):
+        for key, value in d.items():
+            if isinstance(value, dict):
+                if all(k.isdigit() for k in value.keys()):
+                    d[key] = [
+                        v
+                        for k, v in sorted(value.items(), key=lambda item: int(item[0]))
+                    ]
+                else:
+                    convert_to_list(value)
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        convert_to_list(item)
+
+    def has_more_layers(d):
+        for key, value in d.items():
+            if isinstance(value, dict):
+                if any(k.isdigit() for k in value.keys()):
+                    return True
+                else:
+                    if has_more_layers(value):
+                        return True
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict) and has_more_layers(item):
+                        return True
+        return False
+
+    for i, nested_json in enumerate(nested_json_list):
+        while has_more_layers(nested_json):
+            convert_to_list(nested_json)
+
+        if all(key.split("£")[0].isdigit() for key in nested_json.keys()):
+            nested_json_list[i] = [
+                nested_json[str(i)] for i in range(1, len(nested_json) + 1)
+            ]
+
+    if len(nested_json_list) == 1:
+        nested_json_list = nested_json_list[0]
+
+    with open(json_file_path, "w") as file:
+        json.dump(nested_json_list, file, indent=4)
+
+
+DataFrame.import_nested_json_data = import_nested_json_data
+DataFrame.export_nested_json_data = export_nested_json_data
+
+# %% ../nbs/00_core.ipynb 38
+def import_nested_xml_data(self, xml_file_path):
+    """
+    Import nested XML data from a file and create headers by combining headers with underscores.
+    :param xml_file_path: Path to the XML file.
+    """
+    tree = ET.parse(xml_file_path)
+    root = tree.getroot()
+
+    def flatten_xml(element, parent_name=""):
+        items = {}
+        for child in element:
+            child_name = f"{parent_name}{element.tag}_{child.tag}_"
+            if len(child):
+                items.update(flatten_xml(child, child_name))
+            else:
+                items[child_name[:-1]] = child.text
+        return items
+
+    flat_data = [flatten_xml(child) for child in root]
+    self.df = pd.json_normalize(flat_data)
+
+
+def export_nested_xml_data(self, xml_file_path):
+    root = ET.Element("Invetory")
+    for _, row in self.df.iterrows():
+        tag_created = False
+        for col in self.df.columns:
+            tags = col.split("_")
+            for tag in tags[:-1]:
+                # print(tags[:-1])
+                if tag_created is False:
+                    new_tag = ET.SubElement(root, tag)
+                    tag_created = True
+                ET.SubElement(new_tag, tags[-1]).text = str(row[col])
+
+    # Convert to string and pretty print using minidom
+    xml_str = ET.tostring(root, encoding="utf-8")
+    parsed_str = minidom.parseString(xml_str)
+    pretty_xml_str = parsed_str.toprettyxml(indent="  ")
+
+    with open(xml_file_path, "w", encoding="utf-8") as f:
+        f.write(pretty_xml_str)
+
+
+DataFrame.import_nested_xml_data = import_nested_xml_data
+DataFrame.export_nested_xml_data = export_nested_xml_data
+
+# %% ../nbs/00_core.ipynb 40
+def import_data(self, file_path, file_type="csv", header_exists=1, add_header=""):
+    """
+    Import data from a CSV, TSV, JSON, XML, or YAML file.
+    :param file_path: Path to the file.
+    :param file_type: Type of the file ('csv', 'tsv', 'json', 'xml', 'yaml').
+    :param delimiter: Delimiter used in the file (default is comma for CSV).
+    """
+
+    if file_type == "csv":
+        self.df = pd.read_csv(
+            file_path, delimiter=",", header=header_exists if not add_header else None
+        )
+        if add_header:
+            add_header = add_header.replace(" ", "")
+            new_columns = add_header.split(",")
+            if len(new_columns) != len(self.df.columns):
+                raise ValueError(
+                    f"Error: Number of new column names ({len(new_columns)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
+                )
+            self.df.columns = new_columns
+    elif file_type == "tsv":
+        self.df = pd.read_csv(
+            file_path, delimiter="\t", header=header_exists if not add_header else None
+        )
+        if add_header:
+            add_header = add_header.replace(" ", "")
+            new_columns = add_header.split(",")
+            if len(new_columns) != len(self.df.columns):
+                raise ValueError(
+                    f"Error: Number of new column names ({len(new_columns)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
+                )
+            self.df.columns = new_columns
+    elif file_type == "json":
+        self.import_nested_json_data(file_path)
+    elif file_type == "yaml":
+        with open(file_path, "r") as f:
+            data = yaml.safe_load(f)
+            self.df = pd.json_normalize(data)
+    elif file_type == "xml":
+        self.import_nested_xml_data(file_path)
+    #    tree = ET.parse(file_path)
+    #    root = tree.getroot()
+    #    data = self._xml_to_dict(root)
+    #    self.df = pd.json_normalize(data)
+    #    self.df.columns = [col.replace('item.', '') for col in self.df.columns]
+    # else:
+    #    raise ValueError("Unsupported file type. Supported types: 'csv', 'tsv', 'json', 'xml', 'yaml'.")
+
+
+def rename_header(self, new_columns):
+    """
+    Rename columns in the DataFrame.
+    :param new_columns: Comma-separated string of new column names.
+    """
+    new_columns_list = [col.strip() for col in new_columns.split(",")]
+    if len(new_columns_list) != len(self.df.columns):
+        print(
+            "Error: Number of new column names must match the number of columns in the DataFrame."
+        )
+        print("Current header:", self.df.columns.tolist())
+    else:
+        self.df.columns = new_columns_list
+
+
+def filter_columns(self, columns):
+    """
+    Filter the DataFrame to include only specified columns.
+    :param columns: List of columns to include or list of boolean values.
+    """
+    if all(isinstance(col, str) for col in columns):
+        # Case 1: Comma-separated string of column names
+        columns_list = [col.strip() for col in columns.split(",")]
+        if not all(col in self.df.columns for col in columns_list):
+            missing_cols = [col for col in columns_list if col not in self.df.columns]
+            raise ValueError(
+                f"Error: The following columns do not exist in the DataFrame: {missing_cols}"
+            )
+        self.df = self.df[columns_list]
+    elif all(isinstance(col, bool) for col in columns):
+        # Case 2: List of boolean values
+        if len(columns) != len(self.df.columns):
+            raise ValueError(
+                "Error: Number of boolean values must match the number of columns in the DataFrame."
+            )
+        self.df = self.df.loc[:, columns]
+    else:
+        raise ValueError(
+            "Error: columns parameter must be a list of column names or a list of boolean values."
+        )
+
+
+def filter_rows(self, condition):
+    """
+    Filter the DataFrame to include only rows that meet the condition.
+    :param condition: List of integers (row indices starting with 1) or list of boolean values.
+    """
+    if all(isinstance(cond, bool) for cond in condition):
+        # Case 1: List of boolean values
+        if len(condition) != len(self.df):
+            raise ValueError(
+                "Error: Number of boolean values must match the number of rows in the DataFrame."
+            )
+        self.df = self.df[condition]
+    elif all(isinstance(cond, int) for cond in condition):
+        # Case 2: List of integers (row indices starting with 1)
+        if any(cond < 1 or cond > len(self.df) for cond in condition):
+            raise ValueError(
+                "Error: One or more row indices are outside the scope of the DataFrame."
+            )
+        self.df = self.df.iloc[[cond - 1 for cond in condition]]
+    else:
+        raise ValueError(
+            "Error: condition parameter must be a list of integers or a list of boolean values."
+        )
+    # Renumber the rows starting from 1
+    self.df.index = range(1, len(self.df) + 1)
+
+
+def export_data(self, file_path, file_type="csv"):
+    """
+    Export data to a CSV, TSV, JSON, YAML, or XML file.
+    :param file_path: Path to the file.
+    :param file_type: Type of the file ('csv', 'tsv', 'json', 'yaml', 'xml').
+    :param delimiter: Delimiter to use in the file (default is comma for CSV/TSV).
+    """
+    if file_type == "csv":
+        self.df.to_csv(file_path, index=False, sep=",")
+    elif file_type == "tsv":
+        self.df.to_csv(file_path, index=False, sep="\t")
+    elif file_type == "json":
+        self.export_nested_json_data(file_path)
+    elif file_type == "yaml":
+        with open(file_path, "w") as f:
+            yaml.dump(self.df.to_dict(orient="records"), f, sort_keys=False)
+    elif file_type == "xml":
+        self.export_nested_xml_data(file_path)
+    else:
+        raise ValueError(
+            "Unsupported file type. Supported types: 'csv', 'tsv', 'json', 'yaml', 'xml'."
+        )
+
+
+def print_header(self):
+    """
+    Print the header of the DataFrame as a list.
+    """
+    print(self.df.columns.tolist())
+
+
+def show(self):
+    """
+    Display the DataFrame.
+    """
+    print(self.df)
+
+
+DataFrame.import_data = import_data
+DataFrame.rename_header = rename_header
+DataFrame.filter_columns = filter_columns
+DataFrame.filter_rows = filter_rows
+DataFrame.export_data = export_data
+DataFrame.print_header = print_header
+DataFrame.show = show

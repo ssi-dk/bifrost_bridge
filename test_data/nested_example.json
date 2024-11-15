@@ -1,0 +1,53 @@
+{
+    "company": {
+        "name": "Tech Innovators Inc.",
+        "location": "Silicon Valley",
+        "departments": [
+            {
+                "name": "Research and Development",
+                "manager": "Alice Johnson",
+                "employees": [
+                    {
+                        "name": "John Doe",
+                        "position": "Senior Researcher",
+                        "skills": [
+                            "Python",
+                            "Machine Learning",
+                            "Data Analysis"
+                        ]
+                    },
+                    {
+                        "name": "Jane Smith",
+                        "position": "Junior Researcher",
+                        "skills": [
+                            "Java",
+                            "Data Mining"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Marketing",
+                "manager": "Bob Brown",
+                "employees": [
+                    {
+                        "name": "Emily Davis",
+                        "position": "Marketing Specialist",
+                        "skills": [
+                            "SEO",
+                            "Content Creation"
+                        ]
+                    },
+                    {
+                        "name": "Michael Wilson",
+                        "position": "Social Media Manager",
+                        "skills": [
+                            "Social Media",
+                            "Brand Management"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

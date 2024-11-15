@@ -7,3 +7,4 @@ example:
     input:
         name: ${BIFROST_BRIDGE_USER_INPUT_NAME}
         alternative_name: Lee
+

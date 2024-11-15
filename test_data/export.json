@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<Invetory>
+  <Item>
+    <ItemName>Wireless Mouse</ItemName>
+    <ItemID>WM12345</ItemID>
+    <Quantity>150</Quantity>
+    <Price>25.99</Price>
+    <Category>Electronics</Category>
+    <Supplier>Tech Supplies Co.</Supplier>
+  </Item>
+  <Item>
+    <ItemName>Ceramic Coffee Mug</ItemName>
+    <ItemID>CCM67890</ItemID>
+    <Quantity>300</Quantity>
+    <Price>12.50</Price>
+    <Category>Kitchenware</Category>
+    <Supplier>Home Goods Inc.</Supplier>
+  </Item>
+  <Item>
+    <ItemName>Notebook</ItemName>
+    <ItemID>NB13579</ItemID>
+    <Quantity>200</Quantity>
+    <Price>2.99</Price>
+    <Category>Stationery</Category>
+    <Supplier>Office Supplies Ltd.</Supplier>
+  </Item>
+</Invetory>

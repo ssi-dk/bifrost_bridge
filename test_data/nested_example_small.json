@@ -1,0 +1,10 @@
+{
+    "company": {
+        "name": "Tech Innovators Inc.",
+        "location": "Silicon Valley",
+        "departments": {
+            "name": "Research and Development",
+            "manager": "Alice Johnson"
+        }
+    }
+}
