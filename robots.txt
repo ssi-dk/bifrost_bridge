@@ -1,0 +1,1 @@
+Sitemap: https://$GIT_USER_NAME.github.io/bifrost_bridge/sitemap.xml
