@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/02_mlst.html</loc>
+    <lastmod>2024-11-29T11:08:24.538Z</lastmod>
+  </url>
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/03_fastp.html</loc>
+    <lastmod>2024-11-29T11:08:24.414Z</lastmod>
+  </url>
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/core.html</loc>
+    <lastmod>2024-11-29T11:08:24.534Z</lastmod>
+  </url>
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/01_cli.html</loc>
+    <lastmod>2024-11-29T11:08:24.502Z</lastmod>
+  </url>
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/99_bifrost.html</loc>
+    <lastmod>2024-11-29T11:08:24.498Z</lastmod>
+  </url>
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/index.html</loc>
+    <lastmod>2024-11-29T11:08:23.922Z</lastmod>
+  </url>
+  <url>
+    <loc>https://$GIT_USER_NAME.github.io/bifrost_bridge/04_quast.html</loc>
+    <lastmod>2024-11-29T11:08:24.478Z</lastmod>
+  </url>
+</urlset>
