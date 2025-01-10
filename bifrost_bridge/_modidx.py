@@ -38,4 +38,8 @@ d = { 'settings': { 'branch': 'main',
                                                                                             'bifrost_bridge/fastp.py')},
             'bifrost_bridge.mlst': { 'bifrost_bridge.mlst.process_mlst_data': ('mlst.html#process_mlst_data', 'bifrost_bridge/mlst.py'),
                                      'bifrost_bridge.mlst.process_mlst_data_from_cli': ( 'mlst.html#process_mlst_data_from_cli',
-                                                                                         'bifrost_bridge/mlst.py')}}}
+                                                                                         'bifrost_bridge/mlst.py')},
+            'bifrost_bridge.quast': { 'bifrost_bridge.quast.process_quast_data': ( 'quast.html#process_quast_data',
+                                                                                   'bifrost_bridge/quast.py'),
+                                      'bifrost_bridge.quast.process_quast_data_from_cli': ( 'quast.html#process_quast_data_from_cli',
+                                                                                            'bifrost_bridge/quast.py')}}}

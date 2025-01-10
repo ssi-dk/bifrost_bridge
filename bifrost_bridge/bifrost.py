@@ -30,11 +30,15 @@ from . import core
 # %% ../nbs/99_bifrost.ipynb 5
 from .mlst import process_mlst_data
 from .fastp import process_fastp_data
+from .quast import process_quast_data
 
 
 @call_parse
 def process_qc_data(
-    mlst_path: str = None, fastp_path: str = None, output_path: str = "./output.tsv"
+    mlst_path: str = None,
+    fastp_path: str = None,
+    quast_path: str = None,
+    output_path: str = "./output.tsv",
 ):
     """
     Command-line interface for processing QC data.
@@ -47,8 +51,6 @@ def process_qc_data(
         fastp (str): Path to the FASTP input file.
         output (str): Path to the output file (default: './output.tsv').
     """
-    print(mlst_path)
-    print(fastp_path)
     if mlst_path is not None:
         if not os.path.exists(mlst_path):
             raise FileNotFoundError(f"File not found: {mlst_path}")
@@ -69,4 +71,14 @@ def process_qc_data(
             output_path="./parsed_fastp.tsv",
             filter_columns="summary£fastp_version, summary£sequencing, summary£before_filtering£total_reads",
             replace_header="fastp_version, sequencing, total_reads",
+        )
+
+    if quast_path is not None:
+        if not os.path.exists(quast_path):
+            raise FileNotFoundError(f"File not found: {quast_path}")
+        process_quast_data(
+            input_path=quast_path,
+            output_path="./parsed_quast.tsv",
+            filter_columns="Assembly,# contigs (>= 0 bp), N50",
+            transpose=True,
         )
