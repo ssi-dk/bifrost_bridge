@@ -392,30 +392,32 @@ def import_data(self, file_path, file_type="csv", add_header=0):
     :param delimiter: Delimiter used in the file (default is comma for CSV).
     """
     # Check if add_header is a string and split it into a list
-    if add_header == 0:
-        new_columns = None
     if isinstance(add_header, str):
-        add_header = add_header.replace(" ", "")
-        new_columns = add_header.split(",")
-    if isinstance(add_header, list):
-        new_columns = add_header
+        if len(add_header) > 0:
+            add_header = add_header.replace(" ", "").split(",")
+    # elif isinstance(add_header, list) and len(add_header > 0):
 
     if file_type == "csv":
-        self.df = pd.read_csv(file_path, delimiter=",", names=new_columns)
-        if isinstance(add_header, str):
-            if len(new_columns) != len(self.df.columns):
+        self.df = pd.read_csv(
+            file_path, delimiter=",", names=add_header if add_header else None
+        )
+        # if isinstance(add_header, str):
+        if add_header:
+            if len(add_header) != len(self.df.columns):
                 raise ValueError(
-                    f"Error: Number of new column names ({len(new_columns)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
+                    f"Error: Number of new column names ({len(add_header)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
                 )
-            self.df.columns = new_columns
+            # self.df.columns = new_columns
     elif file_type == "tsv":
-        self.df = pd.read_csv(file_path, delimiter="\t", names=new_columns)
-        if isinstance(add_header, str):
-            if len(new_columns) != len(self.df.columns):
+        self.df = pd.read_csv(
+            file_path, delimiter="\t", names=add_header if add_header else None
+        )
+        if add_header:
+            if len(add_header) != len(self.df.columns):
                 raise ValueError(
-                    f"Error: Number of new column names ({len(new_columns)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
+                    f"Error: Number of new column names ({len(add_header)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
                 )
-            self.df.columns = new_columns
+            # self.df.columns = new_columns
     elif file_type == "json":
         self.import_nested_json_data(file_path)
     elif file_type == "yaml":
