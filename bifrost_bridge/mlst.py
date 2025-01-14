@@ -29,10 +29,9 @@ from . import core
 def process_mlst_data(
     input_path: str,
     output_path: str = "./output.tsv",
+    add_header: str = None,
     replace_header: str = None,
     filter_columns: str = None,
-    header_exists: int = 1,
-    add_header: str = None,
 ):
     """
     Command-line interface for processing MLST data.
@@ -43,19 +42,13 @@ def process_mlst_data(
     Arguments:
         input_path (str): Path to the input file.
         output_path (str): Path to the output file (default: './output.tsv').
+        add_header (str): Header to add if the header does not exist in the input file (default: None).
         replace_header (str): Header to replace the existing header (default: None).
         filter_columns (str): Columns to filter from the header (default: None).
-        header_exists (int): Indicates if the header exists in the input file (default: 1).
-        add_header (str): Header to add if the header does not exist in the input file (default: None).
     """
 
-    if header_exists == 0 and not add_header:
-        raise ValueError("add_header is required when header_exists is 0")
-
     df = core.DataFrame()
-    df.import_data(
-        input_path, file_type="tsv", header_exists=header_exists, add_header=add_header
-    )
+    df.import_data(input_path, file_type="tsv", add_header=add_header)
 
     if replace_header:
         df.rename_header(replace_header)
@@ -72,10 +65,9 @@ def process_mlst_data(
 def process_mlst_data_from_cli(
     input_path: str,
     output_path: str = "./output.tsv",
+    add_header: str = None,
     replace_header: str = None,
     filter_columns: str = None,
-    header_exists: int = 1,
-    add_header: str = None,
 ):
     process_mlst_data(
         input_path,

@@ -384,40 +384,43 @@ DataFrame.import_nested_xml_data = import_nested_xml_data
 DataFrame.export_nested_xml_data = export_nested_xml_data
 
 # %% ../nbs/00_core.ipynb 40
-def import_data(self, file_path, file_type="csv", add_header=0):
+def import_data(self, file_path, file_type="csv", add_header=""):
     """
     Import data from a CSV, TSV, JSON, XML, or YAML file.
     :param file_path: Path to the file.
     :param file_type: Type of the file ('csv', 'tsv', 'json', 'xml', 'yaml').
     :param delimiter: Delimiter used in the file (default is comma for CSV).
     """
+
     # Check if add_header is a string and split it into a list
     if isinstance(add_header, str):
         if len(add_header) > 0:
             add_header = add_header.replace(" ", "").split(",")
-    # elif isinstance(add_header, list) and len(add_header > 0):
 
     if file_type == "csv":
         self.df = pd.read_csv(
-            file_path, delimiter=",", names=add_header if add_header else None
+            file_path, delimiter=",", header=None if add_header else 0, index_col=False
         )
-        # if isinstance(add_header, str):
         if add_header:
             if len(add_header) != len(self.df.columns):
                 raise ValueError(
                     f"Error: Number of new column names ({len(add_header)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
                 )
-            # self.df.columns = new_columns
+            else:
+                self.df.columns = add_header
+
     elif file_type == "tsv":
         self.df = pd.read_csv(
-            file_path, delimiter="\t", names=add_header if add_header else None
+            file_path, delimiter="\t", header=None if add_header else 0, index_col=False
         )
         if add_header:
             if len(add_header) != len(self.df.columns):
                 raise ValueError(
                     f"Error: Number of new column names ({len(add_header)}) must match the number of columns in the DataFrame ({len(self.df.columns)})."
                 )
-            # self.df.columns = new_columns
+            else:
+                self.df.columns = add_header
+
     elif file_type == "json":
         self.import_nested_json_data(file_path)
     elif file_type == "yaml":

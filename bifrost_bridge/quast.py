@@ -85,10 +85,11 @@ def process_quast_data(
 def process_quast_data_from_cli(
     input_path: str,
     output_path: str = "./output.tsv",
+    add_header: str = "",
     replace_header: str = None,
     filter_columns: str = None,
     transpose: bool = True,
 ):
     process_quast_data(
-        input_path, output_path, replace_header, filter_columns, transpose
+        input_path, output_path, add_header, replace_header, filter_columns, transpose
     )
