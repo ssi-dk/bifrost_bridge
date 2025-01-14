@@ -10,7 +10,7 @@ __all__ = ['process_quast_data', 'process_quast_data_from_cli']
 import os
 import re
 
-# Common to template
+# Common to template´
 # add into settings.ini, requirements, package name is python-dotenv, for conda build ensure `conda config --add channels conda-forge`
 import dotenv  # for loading config from .env files, https://pypi.org/project/python-dotenv/
 import envyaml  # Allows to loads env vars into a yaml file, https://github.com/thesimj/envyaml
@@ -31,6 +31,7 @@ from . import core
 def process_quast_data(
     input_path: str,
     output_path: str = "./output.tsv",
+    add_header: str = "",
     replace_header: str = None,
     filter_columns: str = None,
     transpose: bool = True,
@@ -50,31 +51,31 @@ def process_quast_data(
     """
 
     df = core.DataFrame()
-    df.import_data(input_path, file_type="csv", add_header="placeholder")
-
     # df.print_header()
     # df.show()
+
+    if transpose:
+        df.import_data(
+            input_path, file_type="tsv", add_header=["column_names", "values"]
+        )
+        df_df = df.df
+        df_df = df_df.T
+        df_df = df_df.rename(columns=df_df.loc["column_names"])
+        df_df.drop("column_names", axis=0, inplace=True)
+        # print(df_df, df_df.shape, df_df.columns)
+        df.df = df_df
+        # df_df.columns = df_df['column_names']
+    else:
+        df.import_data(input_path, file_type="tsv", add_header=add_header)
+        # print(df.df)
 
     if replace_header:
         df.rename_header(replace_header)
 
-    if transpose:
-        df_df = df.df
-        df_df[["column_names", "values"]] = df_df["placeholder"].str.split(
-            "\t", expand=True
-        )
-        df_df.drop("placeholder", axis=1, inplace=True)
-        df_df = df_df.T
-        df_df = df_df.rename(columns=df_df.loc["column_names"])
-        df_df.drop("column_names", axis=0, inplace=True)
-        # print(df_df, df_df.shape)
-        df.df = df_df
-        # df_df.columns = df_df['column_names']
-
     if filter_columns:
         df.filter_columns(filter_columns)
 
-    # print(df.df)
+    # df.show()
     # print(type(df.df))
 
     df.export_data(output_path, file_type="tsv")
