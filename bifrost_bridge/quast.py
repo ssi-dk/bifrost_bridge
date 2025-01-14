@@ -62,9 +62,23 @@ def process_quast_data(
         df_df = df_df.T
         df_df = df_df.rename(columns=df_df.loc["column_names"])
         df_df.drop("column_names", axis=0, inplace=True)
-        # print(df_df, df_df.shape, df_df.columns)
         df.df = df_df
-        # df_df.columns = df_df['column_names']
+        print(add_header)
+        if add_header:
+            add_header = add_header.replace(" ", "").split(",")
+            if len(add_header) != len(df.df.columns):
+                raise ValueError(
+                    f"Error: Number of new column names ({len(add_header)}) must match the number of columns in the DataFrame ({len(df.df.columns)})."
+                )
+            elif isinstance(add_header, str):
+                if len(add_header) > 0:
+                    df.df.columns = add_header
+            elif isinstance(add_header, list):
+                df.df.columns = add_header
+            else:
+                raise ValueError(
+                    f"Error: Invalid type for add_header ({type(add_header)}). Must be a string or list."
+                )
     else:
         df.import_data(input_path, file_type="tsv", add_header=add_header)
         # print(df.df)
@@ -75,7 +89,7 @@ def process_quast_data(
     if filter_columns:
         df.filter_columns(filter_columns)
 
-    # df.show()
+    df.show()
     # print(type(df.df))
 
     df.export_data(output_path, file_type="tsv")
