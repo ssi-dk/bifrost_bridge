@@ -31,6 +31,12 @@ from . import core
 from .mlst import process_mlst_data
 from .fastp import process_fastp_data
 from .quast import process_quast_data
+from .plasmidfinder import process_plasmidfinder_data
+from .bracken import process_bracken_data
+import pandas as pd
+
+# from bifrost_bridge.amrfinder import process_amrfinder_data
+# from bifrost_bridge.pmlst import process_pmlst_data
 
 
 @call_parse
@@ -38,28 +44,37 @@ def process_qc_data(
     mlst_path: str = None,
     fastp_path: str = None,
     quast_path: str = None,
+    plasmidfinder_path: str = None,
+    bracken_path: str = None,
+    amrfinder_path: str = None,
+    pmlst_path: str = None,
+    combine_output: bool = True,
     output_path: str = "./output.tsv",
 ):
     """
     Command-line interface for processing QC data.
 
-    This function processes MLST and FASTP data files based on the provided command-line arguments.
-    It supports specifying input file paths for MLST and FASTP data, and outputs the processed data to specified paths.
+    This function processes MLST, FASTP, QUAST, PlasmidFinder, and Bracken data files based on the provided command-line arguments.
+    It supports specifying input file paths for MLST, FASTP, QUAST, PlasmidFinder, and Bracken data, and outputs the processed data to specified paths.
 
     Arguments:
-        mlst (str): Path to the MLST input file.
-        fastp (str): Path to the FASTP input file.
-        output (str): Path to the output file (default: './output.tsv').
+        mlst_path (str): Path to the MLST input file.
+        fastp_path (str): Path to the FASTP input file.
+        quast_path (str): Path to the QUAST input file.
+        plasmidfinder_path (str): Path to the PlasmidFinder input file.
+        bracken_path (str): Path to the Bracken input file.
+        amrfinder_path (str): Path to the AMRFinder input file.
+        pmlst_path (str): Path to the PMLST input file.
+        output_path (str): Path to the output file (default: './output.tsv').
     """
     if mlst_path is not None:
         if not os.path.exists(mlst_path):
             raise FileNotFoundError(f"File not found: {mlst_path}")
         process_mlst_data(
             input_path=str(mlst_path),
-            output_path="./parsed_mlst.tsv",
+            output_path="test_data/bifrost/parsed_mlst.tsv",
             replace_header=None,
             filter_columns="SampleID, Species, ST",
-            header_exists=0,
             add_header="SampleID, Species, ST, 1, 2, 3, 4, 5, 6, 7",
         )
 
@@ -68,7 +83,7 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {fastp_path}")
         process_fastp_data(
             input_path=fastp_path,
-            output_path="./parsed_fastp.tsv",
+            output_path="test_data/bifrost/parsed_fastp.tsv",
             filter_columns="summary£fastp_version, summary£sequencing, summary£before_filtering£total_reads",
             replace_header="fastp_version, sequencing, total_reads",
         )
@@ -78,7 +93,65 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {quast_path}")
         process_quast_data(
             input_path=quast_path,
-            output_path="./parsed_quast.tsv",
+            output_path="test_data/bifrost/parsed_quast.tsv",
             filter_columns="Assembly,# contigs (>= 0 bp), N50",
             transpose=True,
         )
+
+    if plasmidfinder_path is not None:
+        if not os.path.exists(plasmidfinder_path):
+            raise FileNotFoundError(f"File not found: {plasmidfinder_path}")
+        process_plasmidfinder_data(
+            input_path=plasmidfinder_path,
+            output_path="test_data/bifrost/parsed_plasmidfinder.tsv",
+        )
+
+    if bracken_path is not None:
+        if not os.path.exists(bracken_path):
+            raise FileNotFoundError(f"File not found: {bracken_path}")
+        process_bracken_data(
+            input_path=bracken_path,
+            output_path="test_data/bifrost/parsed_bracken.tsv",
+        )
+
+    if amrfinder_path is not None:
+        if not os.path.exists(amrfinder_path):
+            raise FileNotFoundError(f"File not found: {amrfinder_path}")
+        # process_amrfinder_data(
+        #    input_path=amrfinder_path,
+        #    output_path='test_data/bifrost/parsed_amrfinder.tsv',
+        #    filter_columns='Assembly,# contigs (>= 0 bp), N50',
+        #    transpose=True
+        # )
+
+    if pmlst_path is not None:
+        if not os.path.exists(pmlst_path):
+            raise FileNotFoundError(f"File not found: {pmlst_path}")
+        # process_pmlst_data(
+        #    input_path=pmlst_path,
+        #    output_path='test_data/bifrost/parsed_pmlst.tsv',
+        #    filter_columns='Assembly,# contigs (>= 0 bp), N50',
+        #    transpose=True
+        # )
+
+    if combine_output:
+        # List of output files that were actually created
+        output_files = []
+        if mlst_path is not None:
+            output_files.append("test_data/bifrost/parsed_mlst.tsv")
+        if fastp_path is not None:
+            output_files.append("test_data/bifrost/parsed_fastp.tsv")
+        if quast_path is not None:
+            output_files.append("test_data/bifrost/parsed_quast.tsv")
+        if plasmidfinder_path is not None:
+            output_files.append("test_data/bifrost/parsed_plasmidfinder.tsv")
+        if bracken_path is not None:
+            output_files.append("test_data/bifrost/parsed_bracken.tsv")
+
+        # Read and concatenate all output files
+        combined_df = pd.concat(
+            [pd.read_csv(file, sep="\t") for file in output_files], axis=1
+        )
+
+        # Save the combined dataframe to the specified output path
+        combined_df.to_csv(output_path, sep="\t", index=False)
