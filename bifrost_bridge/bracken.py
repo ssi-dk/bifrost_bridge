@@ -23,6 +23,7 @@ from fastcore.script import (
 )  # for @call_parse, https://fastcore.fast.ai/script
 import json  # for nicely printing json and yaml
 from fastcore import test
+import pandas as pd
 
 #!export
 from . import core
@@ -31,6 +32,7 @@ from . import core
 def process_bracken_data(
     input_path: str,
     output_path: str = "./output.tsv",
+    add_header: str = "%ofreads, reads, notsure, rank, taxid, name",
     replace_header: str = None,
     filter_columns: str = None,
     transpose: bool = True,
@@ -50,27 +52,49 @@ def process_bracken_data(
     """
 
     df = core.DataFrame()
-    df.import_data(input_path, file_type="tsv", add_header=False)
+    df.import_data(input_path, file_type="tsv", add_header=add_header)
 
-    # df.print_header()
-    df.show()
+    df.df = pd.concat(
+        [
+            df.df[df.df["rank"] == "U"],
+            df.df[df.df["rank"] == "S"].sort_values(by="%ofreads", ascending=False),
+        ]
+    )
+    df.df = df.df.head(3)
+
+    df_output = core.DataFrame()
+    df_output.df = pd.DataFrame(
+        {
+            "species1_unclassified_name": [df.df.iloc[1]["name"] + " + unclassified"],
+            "species1_unclassified_pct": [
+                df.df.iloc[1]["%ofreads"] + df.df.iloc[0]["%ofreads"]
+            ],
+            "species1_name": [df.df.iloc[1]["name"]],
+            "species1_pct": [df.df.iloc[1]["%ofreads"]],
+            "species2_name": [df.df.iloc[2]["name"]],
+            "species2_pct": [df.df.iloc[2]["%ofreads"]],
+            "unclassified_name": [df.df.iloc[0]["name"]],
+            "unclassified_pct": [df.df.iloc[0]["%ofreads"]],
+        }
+    )
 
     if replace_header:
-        df.rename_header(replace_header)
+        df_output.rename_header(replace_header)
 
     if filter_columns:
-        df.filter_columns(filter_columns)
+        df_output.filter_columns(filter_columns)
 
     # print(df.df)
     # print(type(df.df))
 
-    # df.export_data(output_path, file_type='tsv')
+    df_output.export_data(output_path, file_type="tsv")
 
 
 @call_parse
 def process_bracken_data_from_cli(
     input_path: str,
     output_path: str = "./output.tsv",
+    add_header: str = "%ofreads, reads, notsure, rank, taxid, name",
     replace_header: str = None,
     filter_columns: str = None,
 ):

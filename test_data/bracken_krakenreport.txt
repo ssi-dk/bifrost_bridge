@@ -1,0 +1,107 @@
+6.15	140179	140179	U	0	unclassified
+93.85	2138325	0	R	1	root
+93.85	2138325	0	R1	131567	  cellular organisms
+93.85	2138267	0	D	2	    Bacteria
+93.84	2138233	0	P	1224	      Proteobacteria
+93.84	2138209	0	C	1236	        Gammaproteobacteria
+93.82	2137619	0	O	135625	          Pasteurellales
+93.82	2137619	0	F	712	            Pasteurellaceae
+93.64	2133642	0	G	713	              Actinobacillus
+92.05	2097453	2097453	S	715	                Actinobacillus pleuropneumoniae
+0.83	18926	18926	S	718	                Actinobacillus equuli
+0.74	16891	16891	S	716	                Actinobacillus suis
+0.01	294	294	S	189834	                Actinobacillus porcitonsillarum
+0.00	77	77	S	67854	                Actinobacillus succinogenes
+0.08	1728	0	G	75984	              Mannheimia
+0.07	1605	1605	S	75985	                Mannheimia haemolytica
+0.00	83	83	S	1432056	                Mannheimia sp. USDA-ARS-USMARC-1261
+0.00	39	39	S	85404	                Mannheimia varigena
+0.05	1164	0	G	724	              Haemophilus
+0.04	799	799	S	730	                [Haemophilus] ducreyi
+0.01	210	210	S	729	                Haemophilus parainfluenzae
+0.01	154	154	S	727	                Haemophilus influenzae
+0.03	629	0	G	2094023	              Glaesserella
+0.03	629	629	S	738	                Glaesserella parasuis
+0.01	243	0	G	214906	              Histophilus
+0.01	243	243	S	731	                Histophilus somni
+0.01	119	0	G	745	              Pasteurella
+0.00	104	104	S	747	                Pasteurella multocida
+0.00	15	15	S	754	                Pasteurella dagmatis
+0.00	39	0	G	697331	              Basfia
+0.00	39	39	S	157673	                [Mannheimia] succiniciproducens
+0.00	27	0	G	476528	              Bibersteinia
+0.00	27	27	S	47735	                Bibersteinia trehalosi
+0.00	13	0	F1	1524964	              unclassified Pasteurellaceae
+0.00	13	0	F2	67757	                unclassified Pasteurellaceae (miscellaneous)
+0.00	13	13	S	1679001	                  Pasteurellaceae bacterium NI1060
+0.00	12	0	G	155493	              Gallibacterium
+0.00	12	12	S	750	                Gallibacterium anatis
+0.02	385	0	O	91347	          Enterobacterales
+0.01	268	0	F	543	            Enterobacteriaceae
+0.00	71	0	G	547	              Enterobacter
+0.00	55	55	S	399742	                Enterobacter sp. 638
+0.00	16	0	G1	354276	                Enterobacter cloacae complex
+0.00	16	16	S	550	                  Enterobacter cloacae
+0.00	70	0	G	570	              Klebsiella
+0.00	70	70	S	573	                Klebsiella pneumoniae
+0.00	67	0	G	590	              Salmonella
+0.00	67	67	S	28901	                Salmonella enterica
+0.00	58	0	G	561	              Escherichia
+0.00	58	58	S	562	                Escherichia coli
+0.01	116	0	F	1903410	            Pectobacteriaceae
+0.01	116	0	G	122277	              Pectobacterium
+0.01	116	116	S	29471	                Pectobacterium atrosepticum
+0.01	153	0	O	135622	          Alteromonadales
+0.01	132	0	F	267891	            Moritellaceae
+0.01	132	0	G	58050	              Moritella
+0.01	132	132	S	69539	                Moritella yayanosii
+0.00	21	0	F	267890	            Shewanellaceae
+0.00	21	0	G	22	              Shewanella
+0.00	21	21	S	60961	                Shewanella woodyi
+0.00	51	0	O	135623	          Vibrionales
+0.00	51	0	F	641	            Vibrionaceae
+0.00	51	0	G	662	              Vibrio
+0.00	51	51	S	28173	                Vibrio nigripulchritudo
+0.00	24	0	C	28216	        Betaproteobacteria
+0.00	24	0	O	206389	          Rhodocyclales
+0.00	24	0	F	75787	            Rhodocyclaceae
+0.00	24	0	F1	75788	              unclassified Rhodocyclaceae
+0.00	24	24	S	1898103	                Rhodocyclaceae bacterium
+0.00	34	0	D1	1783270	      FCB group
+0.00	34	0	D2	68336	        Bacteroidetes/Chlorobi group
+0.00	34	0	P	976	          Bacteroidetes
+0.00	34	0	C	117743	            Flavobacteriia
+0.00	34	0	O	200644	              Flavobacteriales
+0.00	34	0	F	49546	                Flavobacteriaceae
+0.00	34	0	G	286104	                  Winogradskyella
+0.00	34	34	S	1936080	                    Winogradskyella sp. J14-2
+0.00	57	0	D	2759	    Eukaryota
+0.00	57	0	D1	33154	      Opisthokonta
+0.00	57	0	K	33208	        Metazoa
+0.00	57	0	K1	6072	          Eumetazoa
+0.00	57	0	K2	33213	            Bilateria
+0.00	57	0	K3	33511	              Deuterostomia
+0.00	57	0	P	7711	                Chordata
+0.00	57	0	P1	89593	                  Craniata
+0.00	57	0	P2	7742	                    Vertebrata
+0.00	57	0	P3	7776	                      Gnathostomata
+0.00	57	0	P4	117570	                        Teleostomi
+0.00	57	0	P5	117571	                          Euteleostomi
+0.00	57	0	P6	8287	                            Sarcopterygii
+0.00	57	0	P7	1338369	                              Dipnotetrapodomorpha
+0.00	57	0	P8	32523	                                Tetrapoda
+0.00	57	0	P9	32524	                                  Amniota
+0.00	57	0	C	40674	                                    Mammalia
+0.00	57	0	C1	32525	                                      Theria
+0.00	57	0	C2	9347	                                        Eutheria
+0.00	57	0	C3	1437010	                                          Boreoeutheria
+0.00	57	0	C4	314146	                                            Euarchontoglires
+0.00	57	0	O	9443	                                              Primates
+0.00	57	0	O1	376913	                                                Haplorrhini
+0.00	57	0	O2	314293	                                                  Simiiformes
+0.00	57	0	O3	9526	                                                    Catarrhini
+0.00	57	0	O4	314295	                                                      Hominoidea
+0.00	57	0	F	9604	                                                        Hominidae
+0.00	57	0	F1	207598	                                                          Homininae
+0.00	57	0	G	9605	                                                            Homo
+0.00	57	57	S	9606	                                                              Homo sapiens
