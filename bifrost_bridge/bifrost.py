@@ -32,11 +32,10 @@ from .mlst import process_mlst_data
 from .fastp import process_fastp_data
 from .quast import process_quast_data
 from .plasmidfinder import process_plasmidfinder_data
+from .amrfinderplus import process_amrfinderplus_data
 from .bracken import process_bracken_data
+from .pmlst import process_pmlst_data
 import pandas as pd
-
-# from bifrost_bridge.amrfinder import process_amrfinder_data
-# from bifrost_bridge.pmlst import process_pmlst_data
 
 
 @call_parse
@@ -117,22 +116,17 @@ def process_qc_data(
     if amrfinder_path is not None:
         if not os.path.exists(amrfinder_path):
             raise FileNotFoundError(f"File not found: {amrfinder_path}")
-        # process_amrfinder_data(
-        #    input_path=amrfinder_path,
-        #    output_path='test_data/bifrost/parsed_amrfinder.tsv',
-        #    filter_columns='Assembly,# contigs (>= 0 bp), N50',
-        #    transpose=True
-        # )
+        process_amrfinderplus_data(
+            input_path=amrfinder_path,
+            output_path="test_data/bifrost/parsed_amrfinder.tsv",
+        )
 
     if pmlst_path is not None:
         if not os.path.exists(pmlst_path):
             raise FileNotFoundError(f"File not found: {pmlst_path}")
-        # process_pmlst_data(
-        #    input_path=pmlst_path,
-        #    output_path='test_data/bifrost/parsed_pmlst.tsv',
-        #    filter_columns='Assembly,# contigs (>= 0 bp), N50',
-        #    transpose=True
-        # )
+        process_pmlst_data(
+            input_path=pmlst_path, output_path="test_data/bifrost/parsed_pmlst.tsv"
+        )
 
     if combine_output:
         # List of output files that were actually created
