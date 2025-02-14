@@ -48,9 +48,9 @@ def process_fastp_data(
     """
 
     df = core.DataFrame()
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"The input file {input_path} does not exist.")
     df.import_data(input_path, file_type="json")
-    # df.print_header()
-    # df.show()
 
     if filter_columns:
         df.filter_columns(filter_columns)

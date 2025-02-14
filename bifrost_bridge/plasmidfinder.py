@@ -49,9 +49,11 @@ def process_plasmidfinder_data(
     """
 
     df = core.DataFrame()
+
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"The input file {input_path} does not exist.")
     df.import_data(input_path, file_type="tsv", add_header=add_header)
 
-    # print(df.df.columns)
     def concatenate_vector(x, sep=","):
         return ",".join([str(i) for i in x])
 

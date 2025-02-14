@@ -51,8 +51,9 @@ def process_quast_data(
     """
 
     df = core.DataFrame()
-    # df.print_header()
-    # df.show()
+
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"The input file {input_path} does not exist.")
 
     if transpose:
         df.import_data(

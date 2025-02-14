@@ -48,6 +48,9 @@ def process_mlst_data(
     """
 
     df = core.DataFrame()
+
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"The input file {input_path} does not exist.")
     df.import_data(input_path, file_type="tsv", add_header=add_header)
 
     if replace_header:
@@ -70,10 +73,5 @@ def process_mlst_data_from_cli(
     filter_columns: str = None,
 ):
     process_mlst_data(
-        input_path,
-        output_path,
-        replace_header,
-        filter_columns,
-        header_exists,
-        add_header,
+        input_path, output_path, replace_header, filter_columns, add_header
     )
