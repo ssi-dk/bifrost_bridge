@@ -70,11 +70,11 @@ def process_qc_data(
         if not os.path.exists(mlst_path):
             raise FileNotFoundError(f"File not found: {mlst_path}")
         process_mlst_data(
-            input_path=str(mlst_path),
+            input_path=mlst_path,
             output_path="test_data/bifrost/parsed_mlst.tsv",
             replace_header=None,
             filter_columns="SampleID, Species, ST",
-            add_header="SampleID, Species, ST, 1, 2, 3, 4, 5, 6, 7",
+            add_header="SampleID, Species, ST, Allele",
         )
 
     if fastp_path is not None:
@@ -132,15 +132,20 @@ def process_qc_data(
         # List of output files that were actually created
         output_files = []
         if mlst_path is not None:
-            output_files.append("test_data/bifrost/parsed_mlst.tsv")
+            if os.path.getsize("test_data/bifrost/parsed_mlst.tsv") > 0:
+                output_files.append("test_data/bifrost/parsed_mlst.tsv")
         if fastp_path is not None:
             output_files.append("test_data/bifrost/parsed_fastp.tsv")
         if quast_path is not None:
             output_files.append("test_data/bifrost/parsed_quast.tsv")
         if plasmidfinder_path is not None:
+            output_files.append("test_data/bifrost/parsed_amrfinder.tsv")
+        if amrfinder_path is not None:
             output_files.append("test_data/bifrost/parsed_plasmidfinder.tsv")
         if bracken_path is not None:
             output_files.append("test_data/bifrost/parsed_bracken.tsv")
+        if pmlst_path is not None:
+            output_files.append("test_data/bifrost/parsed_pmlst.tsv")
 
         # Read and concatenate all output files
         combined_df = pd.concat(

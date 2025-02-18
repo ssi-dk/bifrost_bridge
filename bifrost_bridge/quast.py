@@ -90,7 +90,7 @@ def process_quast_data(
     if filter_columns:
         df.filter_columns(filter_columns)
 
-    df.show()
+    # df.show()
     # print(type(df.df))
 
     df.export_data(output_path, file_type="tsv")

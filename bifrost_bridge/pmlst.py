@@ -47,7 +47,7 @@ def process_pmlst_data(
         raise FileNotFoundError(f"The input file {input_path} does not exist.")
     df.import_data(input_path, file_type="tsv")
 
-    df.show()
+    # df.show()
 
     df.export_data(output_path, file_type="tsv")
 
