@@ -71,7 +71,7 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {mlst_path}")
         process_mlst_data(
             input_path=mlst_path,
-            output_path="test_data/bifrost/parsed_mlst.tsv",
+            output_path="parsed_mlst.tsv",
             replace_header=None,
             filter_columns="SampleID, Species, ST",
             add_header="SampleID, Species, ST, Allele",
@@ -82,7 +82,7 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {fastp_path}")
         process_fastp_data(
             input_path=fastp_path,
-            output_path="test_data/bifrost/parsed_fastp.tsv",
+            output_path="parsed_fastp.tsv",
             filter_columns="summary£fastp_version, summary£sequencing, summary£before_filtering£total_reads",
             replace_header="fastp_version, sequencing, total_reads",
         )
@@ -92,7 +92,7 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {quast_path}")
         process_quast_data(
             input_path=quast_path,
-            output_path="test_data/bifrost/parsed_quast.tsv",
+            output_path="parsed_quast.tsv",
             filter_columns="Assembly,# contigs (>= 0 bp), N50",
             transpose=True,
         )
@@ -102,7 +102,7 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {plasmidfinder_path}")
         process_plasmidfinder_data(
             input_path=plasmidfinder_path,
-            output_path="test_data/bifrost/parsed_plasmidfinder.tsv",
+            output_path="parsed_plasmidfinder.tsv",
         )
 
     if bracken_path is not None:
@@ -110,42 +110,39 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {bracken_path}")
         process_bracken_data(
             input_path=bracken_path,
-            output_path="test_data/bifrost/parsed_bracken.tsv",
+            output_path="parsed_bracken.tsv",
         )
 
     if amrfinder_path is not None:
         if not os.path.exists(amrfinder_path):
             raise FileNotFoundError(f"File not found: {amrfinder_path}")
         process_amrfinderplus_data(
-            input_path=amrfinder_path,
-            output_path="test_data/bifrost/parsed_amrfinder.tsv",
+            input_path=amrfinder_path, output_path="parsed_amrfinder.tsv"
         )
 
     if pmlst_path is not None:
         if not os.path.exists(pmlst_path):
             raise FileNotFoundError(f"File not found: {pmlst_path}")
-        process_pmlst_data(
-            input_path=pmlst_path, output_path="test_data/bifrost/parsed_pmlst.tsv"
-        )
+        process_pmlst_data(input_path=pmlst_path, output_path="parsed_pmlst.tsv")
 
     if combine_output:
         # List of output files that were actually created
         output_files = []
         if mlst_path is not None:
-            if os.path.getsize("test_data/bifrost/parsed_mlst.tsv") > 0:
-                output_files.append("test_data/bifrost/parsed_mlst.tsv")
+            if os.path.getsize("parsed_mlst.tsv") > 0:
+                output_files.append("parsed_mlst.tsv")
         if fastp_path is not None:
-            output_files.append("test_data/bifrost/parsed_fastp.tsv")
+            output_files.append("parsed_fastp.tsv")
         if quast_path is not None:
-            output_files.append("test_data/bifrost/parsed_quast.tsv")
+            output_files.append("parsed_quast.tsv")
         if plasmidfinder_path is not None:
-            output_files.append("test_data/bifrost/parsed_amrfinder.tsv")
+            output_files.append("parsed_amrfinder.tsv")
         if amrfinder_path is not None:
-            output_files.append("test_data/bifrost/parsed_plasmidfinder.tsv")
+            output_files.append("parsed_plasmidfinder.tsv")
         if bracken_path is not None:
-            output_files.append("test_data/bifrost/parsed_bracken.tsv")
+            output_files.append("parsed_bracken.tsv")
         if pmlst_path is not None:
-            output_files.append("test_data/bifrost/parsed_pmlst.tsv")
+            output_files.append("parsed_pmlst.tsv")
 
         # Read and concatenate all output files
         combined_df = pd.concat(
