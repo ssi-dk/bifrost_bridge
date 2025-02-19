@@ -136,9 +136,9 @@ def process_qc_data(
         if quast_path is not None:
             output_files.append("parsed_quast.tsv")
         if plasmidfinder_path is not None:
-            output_files.append("parsed_amrfinder.tsv")
-        if amrfinder_path is not None:
             output_files.append("parsed_plasmidfinder.tsv")
+        if amrfinder_path is not None:
+            output_files.append("parsed_amrfinder.tsv")
         if bracken_path is not None:
             output_files.append("parsed_bracken.tsv")
         if pmlst_path is not None:
