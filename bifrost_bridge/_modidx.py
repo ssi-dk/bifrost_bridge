@@ -59,4 +59,8 @@ d = { 'settings': { 'branch': 'main',
             'bifrost_bridge.quast': { 'bifrost_bridge.quast.process_quast_data': ( 'quast.html#process_quast_data',
                                                                                    'bifrost_bridge/quast.py'),
                                       'bifrost_bridge.quast.process_quast_data_from_cli': ( 'quast.html#process_quast_data_from_cli',
-                                                                                            'bifrost_bridge/quast.py')}}}
+                                                                                            'bifrost_bridge/quast.py')},
+            'bifrost_bridge.rmlst': { 'bifrost_bridge.rmlst.process_rmlst_data': ( 'rmlst.html#process_rmlst_data',
+                                                                                   'bifrost_bridge/rmlst.py'),
+                                      'bifrost_bridge.rmlst.process_rmlst_data_from_cli': ( 'rmlst.html#process_rmlst_data_from_cli',
+                                                                                            'bifrost_bridge/rmlst.py')}}}

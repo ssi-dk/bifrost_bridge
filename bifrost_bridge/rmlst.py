@@ -88,7 +88,7 @@ def process_rmlst_data(
         df.export_data(output_path, file_type="tsv")
     else:
         empty_df = pd.DataFrame(
-            columns=[col.strip() for col in filter_columns.split(",")]
+            columns=[col.strip() for col in replace_header.split(",")]
         )
         empty_df.to_csv(output_path, index=False)
 
