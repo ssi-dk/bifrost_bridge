@@ -47,6 +47,7 @@ def process_qc_data(
     bracken_path: str = None,
     amrfinder_path: str = None,
     pmlst_path: str = None,
+    rmlst_path: str = None,
     combine_output: bool = True,
     output_path: str = "./output.tsv",
 ):
@@ -125,6 +126,16 @@ def process_qc_data(
             raise FileNotFoundError(f"File not found: {pmlst_path}")
         process_pmlst_data(input_path=pmlst_path, output_path="parsed_pmlst.tsv")
 
+    if rmlst_path is not None:
+        if not os.path.exists(rmlst_path):
+            raise FileNotFoundError(f"File not found: {rmlst_path}")
+        process_rmlst_data(
+            input_path=rmlst_path,
+            output_path="parsed_rmlst.tsv",
+            filter_columns="taxon,species,rank,support",
+            replace_header="match,species,rank,percentage",
+        )
+
     if combine_output:
         # List of output files that were actually created
         output_files = []
@@ -143,6 +154,8 @@ def process_qc_data(
             output_files.append("parsed_bracken.tsv")
         if pmlst_path is not None:
             output_files.append("parsed_pmlst.tsv")
+        if rmlst_path is not None:
+            output_files.append("parsed_rmlst.tsv")
 
         # Read and concatenate all output files
         combined_df = pd.concat(
