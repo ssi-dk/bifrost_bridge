@@ -35,6 +35,7 @@ from .plasmidfinder import process_plasmidfinder_data
 from .amrfinderplus import process_amrfinderplus_data
 from .bracken import process_bracken_data
 from .pmlst import process_pmlst_data
+from .rmlst import process_rmlst_data
 import pandas as pd
 
 
