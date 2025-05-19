@@ -70,11 +70,12 @@ def process_rmlst_data(
             taxon_prediction_df.apply(concatenate_vector, axis=0).to_frame().T
         )  # concatenate the list into one line
         # print(rmlst_dict['taxon_prediction'])
-        fields_df = pd.Series(rmlst_dict["fields"]).to_frame().T
+        # fields_df = pd.Series(rmlst_dict['fields']).to_frame().T # some samples don't get this object, skip it
         # TODO: concatenate df, put it in to the scuffed povilas object and then carry on
         # print(fields_df)
         # print(taxon_prediction_df)
-        conc_df = pd.concat((fields_df, taxon_prediction_df), axis=1)
+        # conc_df = pd.concat((fields_df, taxon_prediction_df), axis=1)
+        conc_df = taxon_prediction_df
         df.df = conc_df
 
         if filter_columns:

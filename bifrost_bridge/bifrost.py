@@ -133,8 +133,8 @@ def process_qc_data(
         process_rmlst_data(
             input_path=rmlst_path,
             output_path="parsed_rmlst.tsv",
-            filter_columns="taxon,species,rank,support",
-            replace_header="match,species,rank,percentage",
+            filter_columns="taxon,taxonomy,rank,support",
+            replace_header="match,taxonomy,rank,percentage",
         )
 
     if combine_output:
