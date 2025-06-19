@@ -75,8 +75,9 @@ def process_qc_data(
             input_path=mlst_path,
             output_path="parsed_mlst.tsv",
             replace_header=None,
-            filter_columns="SampleID, Species, ST",
-            add_header="SampleID, Species, ST, Allele",
+            # filter_columns="SampleID, Species, ST",
+            remove_sampleid=True,
+            add_header="SampleID, MLST_Species, MLST_ST, MLST_Allele",
         )
 
     if fastp_path is not None:
@@ -85,8 +86,8 @@ def process_qc_data(
         process_fastp_data(
             input_path=fastp_path,
             output_path="parsed_fastp.tsv",
-            filter_columns="summary£fastp_version, summary£sequencing, summary£before_filtering£total_reads",
-            replace_header="fastp_version, sequencing, total_reads",
+            filter_columns="summary£before_filtering£total_reads, summary£before_filtering£read1_mean_length, summary£before_filtering£read2_mean_length, summary£after_filtering£total_reads, summary£after_filtering£read1_mean_length, summary£after_filtering£read2_mean_length, filtering_result£low_quality_reads, filtering_result£too_many_N_reads, filtering_result£too_short_reads, filtering_result£too_long_reads, duplication£rate, adapter_cutting£adapter_trimmed_reads, adapter_cutting£adapter_trimmed_bases, read1_before_filtering£total_cycles, read1_after_filtering£total_cycles, read2_before_filtering£total_cycles, read2_after_filtering£total_cycles",
+            replace_header="fastp_Before_Filtering_Total_Reads,fastp_Before_Filtering_Read1_Mean_Length,fastp_Before_Filtering_Read2_Mean_Length,fastp_After_Filtering_Total_Reads,fastp_After_Filtering_Read1_Mean_Length,fastp_After_Filtering_Read2_Mean_Length,fastp_Low_Quality_Reads,fastp_Too_Many_N_Reads,fastp_Too_Short_Reads,fastp_Too_Long_Reads,fastp_Duplication_Rate,fastp_Adapter_Trimmed_Reads,fastp_Adapter_Trimmed_Bases,fastp_Read1_Before_Filtering_Total_Cycles,fastp_Read1_After_Filtering_Total_Cycles,fastp_Read2_Before_Filtering_Total_Cycles,fastp_Read2_After_Filtering_Total_Cycles",
         )
 
     if quast_path is not None:
@@ -95,7 +96,8 @@ def process_qc_data(
         process_quast_data(
             input_path=quast_path,
             output_path="parsed_quast.tsv",
-            filter_columns="Assembly,# contigs (>= 0 bp), N50",
+            filter_columns="# contigs, Largest contig, Total length, GC (%), N50, N90, L50, L90",
+            replace_header="Quast_Contigs,Quast_Largest_Contig,Quast_Total_Length,Quast_GC_Pct,Quast_N50,Quast_N90,Quast_L50,Quast_L90",
             transpose=True,
         )
 
@@ -105,6 +107,10 @@ def process_qc_data(
         process_plasmidfinder_data(
             input_path=plasmidfinder_path,
             output_path="parsed_plasmidfinder.tsv",
+            filter_columns="Database,Plasmid,Identity,Query / Template length,Contig",
+            replace_header="PFInder_Database,PFinder_Plasmid,PFinder_Identity,PFinder_Coverage,PFinder_Contig",
+            convert_coverage=True,
+            filter_contig=True,
         )
 
     if bracken_path is not None:
@@ -113,19 +119,27 @@ def process_qc_data(
         process_bracken_data(
             input_path=bracken_path,
             output_path="parsed_bracken.tsv",
+            replace_header="Bracken_Species,Bracken_Species_Pct,Bracken_Species1,Bracken_Species1_Pct,Bracken_Species2,Bracken_Species2_Pct,Bracken_Unclassified,Bracken_Unclassified_Pct",
         )
 
     if amrfinder_path is not None:
         if not os.path.exists(amrfinder_path):
             raise FileNotFoundError(f"File not found: {amrfinder_path}")
         process_amrfinderplus_data(
-            input_path=amrfinder_path, output_path="parsed_amrfinder.tsv"
+            input_path=amrfinder_path,
+            output_path="parsed_amrfinder.tsv",
+            filter_columns="Contig id,Start,Stop,Strand,Element symbol,Element name,Subclass,% Coverage of reference,% Identity to reference",
+            replace_header="AMR_ContigID,AMR_Start,AMR_Stop,AMR_Strand,AMR_ElementSymbol,AMR_ElementName,AMR_Subclass,AMR_Coverage,AMR_Identity",
         )
 
     if pmlst_path is not None:
         if not os.path.exists(pmlst_path):
             raise FileNotFoundError(f"File not found: {pmlst_path}")
-        process_pmlst_data(input_path=pmlst_path, output_path="parsed_pmlst.tsv")
+        process_pmlst_data(
+            input_path=pmlst_path,
+            output_path="parsed_pmlst.tsv",
+            replace_header="pMLST_plasmids,pMLST_IncF,pMLST_IncI1,pMLST_IncA/C,pMLST_IncHI1,pMLST_IncHI2,pMLST_IncN,pMLST_summary",
+        )
 
     if rmlst_path is not None:
         if not os.path.exists(rmlst_path):
@@ -133,8 +147,8 @@ def process_qc_data(
         process_rmlst_data(
             input_path=rmlst_path,
             output_path="parsed_rmlst.tsv",
-            filter_columns="taxon,taxonomy,rank,support",
-            replace_header="match,taxonomy,rank,percentage",
+            filter_columns="taxon,rank,support",
+            replace_header="rMLST_match,rMLST_rank,rMLST_support",
         )
 
     if combine_output:

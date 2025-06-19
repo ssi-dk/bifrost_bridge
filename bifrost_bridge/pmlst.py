@@ -27,7 +27,10 @@ from . import core
 
 # %% ../nbs/08_pmlst.ipynb 6
 def process_pmlst_data(
-    input_path: str, output_path: str = "./output.tsv", filter_columns: str = None
+    input_path: str,
+    output_path: str = "./output.tsv",
+    filter_columns: str = None,
+    replace_header: str = None,
 ):
     """
     Command-line interface for processing PMLST data.
@@ -39,6 +42,7 @@ def process_pmlst_data(
         input_path (str): Path to the input file.
         output_path (str): Path to the output file (default: './output.tsv').
         filter_columns (str): Columns to filter from the header (default: None).
+        replace_header (str): New header to replace the existing one (default: None).
     """
 
     df = core.DataFrame()
@@ -47,6 +51,9 @@ def process_pmlst_data(
         raise FileNotFoundError(f"The input file {input_path} does not exist.")
     df.import_data(input_path, file_type="tsv")
 
+    if replace_header:
+        df.rename_header(replace_header)
+
     # df.show()
 
     df.export_data(output_path, file_type="tsv")
@@ -54,6 +61,9 @@ def process_pmlst_data(
 
 @call_parse
 def process_pmlst_data_from_cli(
-    input_path: str, output_path: str = "./output.tsv", filter_columns: str = None
+    input_path: str,
+    output_path: str = "./output.tsv",
+    filter_columns: str = None,
+    replace_header: str = None,
 ):
-    process_pmlst_data(input_path, output_path, filter_columns)
+    process_pmlst_data(input_path, output_path, filter_columns, replace_header)

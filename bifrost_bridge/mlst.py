@@ -32,6 +32,7 @@ def process_mlst_data(
     add_header: str = None,
     replace_header: str = None,
     filter_columns: str = None,
+    remove_sampleid: bool = False,
 ):
     """
     Command-line interface for processing MLST data.
@@ -77,6 +78,11 @@ def process_mlst_data(
     if filter_columns:
         df.filter_columns(filter_columns)
 
+    if remove_sampleid:
+        # Remove the first column (SampleID) if it exists
+        if df.df.columns[0] == "SampleID":
+            df.df = df.df.iloc[:, 1:]
+
     df.export_data(output_path, file_type="tsv")
 
 
@@ -94,7 +100,13 @@ def process_mlst_data_from_cli(
     add_header: str = None,
     replace_header: str = None,
     filter_columns: str = None,
+    remove_sampleid: bool = False,
 ):
     process_mlst_data(
-        input_path, output_path, add_header, replace_header, filter_columns
+        input_path,
+        output_path,
+        add_header,
+        replace_header,
+        filter_columns,
+        remove_sampleid,
     )

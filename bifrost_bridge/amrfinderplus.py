@@ -59,11 +59,12 @@ def process_amrfinderplus_data(
 
     df_agg = df.df.apply(concatenate_vector, axis=0)
     df.df = df_agg.to_frame().T
-    if replace_header:
-        df.rename_header(replace_header)
 
     if filter_columns:
         df.filter_columns(filter_columns)
+
+    if replace_header:
+        df.rename_header(replace_header)
 
     # df.show()
 

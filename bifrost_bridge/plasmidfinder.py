@@ -32,6 +32,8 @@ def process_plasmidfinder_data(
     replace_header: str = None,
     filter_columns: str = None,
     add_header: str = None,
+    convert_coverage: bool = False,
+    filter_contig: bool = False,
 ):
     """
     Command-line interface for processing plasmidfinder data.
@@ -46,6 +48,8 @@ def process_plasmidfinder_data(
         filter_columns (str): Columns to filter from the header (default: None).
         header_exists (int): Indicates if the header exists in the input file (default: 1).
         add_header (str): Header to add if the header does not exist in the input file (default: None).
+        convert_coverage (bool): If True, converts coverage values in the 'Query / Template length' column to percentages (default: False).
+        filter_contig (bool): If True, filters out 'Contig' column to just contig number (default: False).
     """
 
     df = core.DataFrame()
@@ -59,11 +63,50 @@ def process_plasmidfinder_data(
 
     df_agg = df.df.apply(concatenate_vector, axis=0)
     df.df = df_agg.to_frame().T
-    if replace_header:
-        df.rename_header(replace_header)
+
+    # PFinder_Coverage contains value like "152 / 152,682 / 682", thats two values separated by commas, I would like to divide first number by second number and replaces the value with the result
+    def process_coverage(val):
+        # Split by comma, process each "a / b" part, return comma-separated results
+        parts = [v.strip() for v in str(val).split(",")]
+        results = []
+        for part in parts:
+            if "/" in part:
+                num, denom = part.split("/")
+                try:
+                    ratio = float(num.strip()) / float(denom.strip()) * 100
+                    results.append(str(ratio))
+                except Exception:
+                    results.append(part)
+            else:
+                results.append(part)
+        return ",".join(results)
+
+    if convert_coverage:
+        df.df["Query / Template length"] = df.df["Query / Template length"].apply(
+            process_coverage
+        )
+
+    def extract_contig(val):
+        # Extract the first part before any space or comma
+        parts = [v.strip() for v in str(val).split(",")]
+        results = []
+        for part in parts:
+            match = re.search(r"\b(\w+)\d+\b", part)
+            if match:
+                results.append(match.group(0))
+            else:
+                results.append(part)
+        return ",".join(results)
+
+    # If filter_contig is True, we look at the 'Contig' column, it contains "textXXXX more text,text2XXXXX more text", we want to extract textXXXX,text2XXXXX, etc
+    if filter_contig:
+        df.df["Contig"] = df.df["Contig"].apply(extract_contig)
 
     if filter_columns:
         df.filter_columns(filter_columns)
+
+    if replace_header:
+        df.rename_header(replace_header)
 
     # df.show()
 
@@ -77,7 +120,15 @@ def process_plasmidfinder_data_from_cli(
     replace_header: str = None,
     filter_columns: str = None,
     add_header: str = None,
+    convert_coverage: bool = False,
+    filter_contig: bool = False,
 ):
     process_plasmidfinder_data(
-        input_path, output_path, replace_header, filter_columns, add_header
+        input_path,
+        output_path,
+        replace_header,
+        filter_columns,
+        add_header,
+        convert_coverage,
+        filter_contig,
     )

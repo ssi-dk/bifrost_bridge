@@ -84,14 +84,11 @@ def process_quast_data(
         df.import_data(input_path, file_type="tsv", add_header=add_header)
         # print(df.df)
 
-    if replace_header:
-        df.rename_header(replace_header)
-
     if filter_columns:
         df.filter_columns(filter_columns)
 
-    # df.show()
-    # print(type(df.df))
+    if replace_header:
+        df.rename_header(replace_header)
 
     df.export_data(output_path, file_type="tsv")
 

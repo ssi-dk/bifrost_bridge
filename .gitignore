@@ -164,3 +164,6 @@ checklink/cookies.txt
 
 # Quarto
 .quarto
+
+# Conda
+conda/
