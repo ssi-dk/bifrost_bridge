@@ -128,7 +128,7 @@ def process_qc_data(
         process_amrfinderplus_data(
             input_path=amrfinder_path,
             output_path="parsed_amrfinder.tsv",
-            filter_columns="Contig id,Start,Stop,Strand,Element symbol,Element name,Subclass,% Coverage of reference,% Identity to reference",
+            filter_columns="Contig id,Start,Stop,Strand,Gene symbol,Sequence name,Subclass,% Coverage of reference sequence,% Identity to reference sequence",
             replace_header="AMR_ContigID,AMR_Start,AMR_Stop,AMR_Strand,AMR_ElementSymbol,AMR_ElementName,AMR_Subclass,AMR_Coverage,AMR_Identity",
         )
 
