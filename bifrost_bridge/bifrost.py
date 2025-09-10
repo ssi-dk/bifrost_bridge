@@ -36,6 +36,7 @@ from .amrfinderplus import process_amrfinderplus_data
 from .bracken import process_bracken_data
 from .pmlst import process_pmlst_data
 from .rmlst import process_rmlst_data
+from .shovill import process_shovill_data
 import pandas as pd
 
 
@@ -49,6 +50,7 @@ def process_qc_data(
     amrfinder_path: str = None,
     pmlst_path: str = None,
     rmlst_path: str = None,
+    shovill_path: str = None,
     combine_output: bool = True,
     output_path: str = "./output.tsv",
 ):
@@ -66,6 +68,7 @@ def process_qc_data(
         bracken_path (str): Path to the Bracken input file.
         amrfinder_path (str): Path to the AMRFinder input file.
         pmlst_path (str): Path to the PMLST input file.
+        shovill_path (str): Path to the Shovill input file.
         output_path (str): Path to the output file (default: './output.tsv').
     """
     if mlst_path is not None:
@@ -77,7 +80,8 @@ def process_qc_data(
             replace_header=None,
             # filter_columns="SampleID, Species, ST",
             remove_sampleid=True,
-            add_header="SampleID, MLST_Species, MLST_ST, MLST_Allele",
+            add_header="SampleID, MLST_Species, MLST_ST, MLST_Alleles",
+            combine_alleles=True,
         )
 
     if fastp_path is not None:
@@ -151,6 +155,15 @@ def process_qc_data(
             replace_header="rMLST_match,rMLST_rank,rMLST_support",
         )
 
+    if shovill_path is not None:
+        if not os.path.exists(shovill_path):
+            raise FileNotFoundError(f"File not found: {shovill_path}")
+        process_shovill_data(
+            input_path=shovill_path,
+            output_path="parsed_shovill.tsv",
+            average_coverage=True,
+        )
+
     if combine_output:
         # List of output files that were actually created
         output_files = []
@@ -171,6 +184,8 @@ def process_qc_data(
             output_files.append("parsed_pmlst.tsv")
         if rmlst_path is not None:
             output_files.append("parsed_rmlst.tsv")
+        if shovill_path is not None:
+            output_files.append("parsed_shovill.tsv")
 
         # Read and concatenate all output files
         combined_df = pd.concat(

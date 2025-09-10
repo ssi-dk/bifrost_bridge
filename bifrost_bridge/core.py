@@ -4,7 +4,7 @@
 __all__ = ['PACKAGE_NAME', 'DEV_MODE', 'PACKAGE_DIR', 'PROJECT_DIR', 'config', 'set_env_variables', 'get_config',
            'show_project_env_vars', 'get_samplesheet', 'hello_world', 'cli', 'DataFrame', 'import_nested_json_data',
            'export_nested_json_data', 'import_nested_xml_data', 'export_nested_xml_data', 'import_data',
-           'rename_header', 'filter_columns', 'filter_rows', 'export_data', 'print_header', 'show']
+           'rename_header', 'filter_columns', 'filter_rows', 'export_data', 'add_column', 'print_header', 'show']
 
 # %% ../nbs/00_core.ipynb 4
 # Need the bifrost_bridge for a few functions, this can be considered a static var
@@ -531,6 +531,27 @@ def export_data(self, file_path, file_type="csv"):
         )
 
 
+def add_column(self, column_name, data):
+    """
+    Add a new column to the DataFrame.
+    :param column_name: Name of the new column.
+    :param data: Data for the new column (must match the number of rows).
+    """
+    if column_name in self.df.columns:
+        raise ValueError(
+            f"Error: Column '{column_name}' already exists in the DataFrame."
+        )
+    if len(self.df) == 0:
+        # If DataFrame is empty, create it with the new column
+        self.df = pd.DataFrame({column_name: data})
+    else:
+        if len(data) != len(self.df):
+            raise ValueError(
+                "Error: Length of data must match the number of rows in the DataFrame."
+            )
+        self.df[column_name] = data
+
+
 def print_header(self):
     """
     Print the header of the DataFrame as a list.
@@ -551,4 +572,5 @@ DataFrame.filter_columns = filter_columns
 DataFrame.filter_rows = filter_rows
 DataFrame.export_data = export_data
 DataFrame.print_header = print_header
+DataFrame.add_column = add_column
 DataFrame.show = show

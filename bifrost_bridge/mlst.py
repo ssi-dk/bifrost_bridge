@@ -33,6 +33,7 @@ def process_mlst_data(
     replace_header: str = None,
     filter_columns: str = None,
     remove_sampleid: bool = False,
+    combine_alleles: bool = False,
 ):
     """
     Command-line interface for processing MLST data.
@@ -46,6 +47,8 @@ def process_mlst_data(
         add_header (str): Header to add if the header does not exist in the input file (default: None).
         replace_header (str): Header to replace the existing header (default: None).
         filter_columns (str): Columns to filter from the header (default: None).
+        remove_sampleid (bool): Whether to remove the SampleID column (default: False).
+        combine_alleles (bool): Whether to combine allele columns into one (default: False).
     """
 
     if not os.path.exists(input_path):
@@ -62,11 +65,25 @@ def process_mlst_data(
     df = core.DataFrame()
     df.import_data(input_path, file_type="tsv")
 
+    if combine_alleles:
+        # print 4th and further values of df.df.columns in a comma separated list
+        combine_alleles_string = ",".join(df.df.columns[3:])
+
+        # Replace 4th column with combined string
+        cols = list(df.df.columns)
+        cols[3] = combine_alleles_string
+        df.df.columns = cols
+
+        # Remove columns after 4th
+        df.df = df.df.iloc[:, :4]
+
     if add_header:
         header_list = add_header.split(", ")
-        header_list[3] = header_list[3] + "1"
-        for i in range(4, len(df.df.columns)):
-            header_list.append(header_list[3][:-1] + str(i - 2))
+        # Add more headers if not combining alleles
+        if not combine_alleles:
+            header_list[3] = header_list[3] + "1"
+            for i in range(4, len(df.df.columns)):
+                header_list.append(header_list[3][:-1] + str(i - 2))
         df.df.loc[-1] = df.df.columns  # adding header as first row
         df.df.index = df.df.index + 1  # shifting index
         df.df = df.df.sort_index()  # sorting by index to move the header row to the top
@@ -101,6 +118,7 @@ def process_mlst_data_from_cli(
     replace_header: str = None,
     filter_columns: str = None,
     remove_sampleid: bool = False,
+    combine_alleles: bool = False,
 ):
     process_mlst_data(
         input_path,
@@ -109,4 +127,5 @@ def process_mlst_data_from_cli(
         replace_header,
         filter_columns,
         remove_sampleid,
+        combine_alleles,
     )
