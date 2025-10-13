@@ -68,4 +68,8 @@ d = { 'settings': { 'branch': 'main',
             'bifrost_bridge.shovill': { 'bifrost_bridge.shovill.process_shovill_data': ( 'shovill.html#process_shovill_data',
                                                                                          'bifrost_bridge/shovill.py'),
                                         'bifrost_bridge.shovill.process_shovill_data_from_cli': ( 'shovill.html#process_shovill_data_from_cli',
-                                                                                                  'bifrost_bridge/shovill.py')}}}
+                                                                                                  'bifrost_bridge/shovill.py')},
+            'bifrost_bridge.ssiamb': { 'bifrost_bridge.ssiamb.process_ssiamb_data': ( 'ssiamb.html#process_ssiamb_data',
+                                                                                      'bifrost_bridge/ssiamb.py'),
+                                       'bifrost_bridge.ssiamb.process_ssiamb_data_from_cli': ( 'ssiamb.html#process_ssiamb_data_from_cli',
+                                                                                               'bifrost_bridge/ssiamb.py')}}}

@@ -37,6 +37,7 @@ from .bracken import process_bracken_data
 from .pmlst import process_pmlst_data
 from .rmlst import process_rmlst_data
 from .shovill import process_shovill_data
+from .ssiamb import process_ssiamb_data
 import pandas as pd
 
 
@@ -51,6 +52,7 @@ def process_qc_data(
     pmlst_path: str = None,
     rmlst_path: str = None,
     shovill_path: str = None,
+    ssiamb_path: str = None,
     combine_output: bool = True,
     output_path: str = "./output.tsv",
 ):
@@ -164,6 +166,16 @@ def process_qc_data(
             average_coverage=True,
         )
 
+    if ssiamb_path is not None:
+        if not os.path.exists(ssiamb_path):
+            raise FileNotFoundError(f"File not found: {ssiamb_path}")
+        process_ssiamb_data(
+            input_path=ssiamb_path,
+            output_path="parsed_ssiamb.tsv",
+            replace_header="ssiamb_count",
+            filter_columns="ambiguous_snv_count",
+        )
+
     if combine_output:
         # List of output files that were actually created
         output_files = []
@@ -186,6 +198,8 @@ def process_qc_data(
             output_files.append("parsed_rmlst.tsv")
         if shovill_path is not None:
             output_files.append("parsed_shovill.tsv")
+        if ssiamb_path is not None:
+            output_files.append("parsed_ssiamb.tsv")
 
         # Read and concatenate all output files
         combined_df = pd.concat(

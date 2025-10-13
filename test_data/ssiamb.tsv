@@ -1,0 +1,2 @@
+sample	mode	mapper	caller	dp_min	maf_min	dp_cap	denom_policy	callable_bases	genome_length	breadth_10x	ambiguous_snv_count	ambiguous_snv_per_mb	ambiguous_indel_count	ambiguous_del_count	ref_label	ref_accession	bracken_species	bracken_frac	bracken_reads	alias_used	reused_bam	reused_vcf	runtime_sec	tool_version
+sample	self	minimap2	bbtools	10	0.1	100	exclude_dups	372971510	5395912	69.1211	5388	14.45	10	17	dataset_d4231a03-baa1-4b43-9bfc-f468b909e2a8.dat	contig00001	NA	0.0	0	NA	False	False	278.405227	bcftools:1.22;minimap2:2.30;mosdepth:0.3.10;samtools:1.22.1
