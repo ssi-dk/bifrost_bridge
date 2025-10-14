@@ -58,7 +58,7 @@ def process_ssiamb_data(
     if replace_header:
         df.rename_header(replace_header)
 
-    df.show()
+    # df.show()
 
     df.export_data(output_path, file_type="tsv")
 

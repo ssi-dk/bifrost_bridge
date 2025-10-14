@@ -49,6 +49,7 @@ def process_qc_data(
     plasmidfinder_path: str = None,
     bracken_path: str = None,
     amrfinder_path: str = None,
+    amrfinder_version_path: str = None,
     pmlst_path: str = None,
     rmlst_path: str = None,
     shovill_path: str = None,
@@ -69,8 +70,12 @@ def process_qc_data(
         plasmidfinder_path (str): Path to the PlasmidFinder input file.
         bracken_path (str): Path to the Bracken input file.
         amrfinder_path (str): Path to the AMRFinder input file.
+        amrfinder_version_path (str): Path to the AMRFinder version file.
         pmlst_path (str): Path to the PMLST input file.
         shovill_path (str): Path to the Shovill input file.
+        rmlst_path (str): Path to the rMLST input file.
+        ssiamb_path (str): Path to the SSIAMB input file.
+        combine_output (bool): Whether to combine all outputs into a single file (default: True
         output_path (str): Path to the output file (default: './output.tsv').
     """
     if mlst_path is not None:
@@ -190,6 +195,8 @@ def process_qc_data(
             output_files.append("parsed_plasmidfinder.tsv")
         if amrfinder_path is not None:
             output_files.append("parsed_amrfinder.tsv")
+        if amrfinder_version_path is not None:
+            output_files.append(amrfinder_version_path)
         if bracken_path is not None:
             output_files.append("parsed_bracken.tsv")
         if pmlst_path is not None:
