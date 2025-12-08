@@ -1,2 +1,2 @@
-MLST_Species	MLST_ST	MLST_Alleles	AMR_dbv_toolv	ssiamb_count
-campylobacter	22	aspA(1),glnA(3),gltA(6),glyA(4),pgm(3),tkt(3),uncA(3)	V3.12-2024-05-02.2,3.12	5388
+MLST_Species	MLST_ST	MLST_Alleles	rMLST_match	rMLST_support	ssiamb_count
+campylobacter	22	aspA(1),glnA(3),gltA(6),glyA(4),pgm(3),tkt(3),uncA(3)			5388

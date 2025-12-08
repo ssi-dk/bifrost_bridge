@@ -30,6 +30,7 @@ import pandas as pd
 def process_rmlst_data(
     input_path: str,
     output_path: str = "./output.tsv",
+    parsed: bool = False,
     replace_header: str = None,
     filter_columns: str = None,
     add_header: str = None,
@@ -43,6 +44,7 @@ def process_rmlst_data(
     Arguments:
         input_path (str): Path to the input file.
         output_path (str): Path to the output file (default: './output.tsv').
+        parsed (bool): Indicates if the input file is already parsed (default: False).
         replace_header (str): Header to replace the existing header (default: None).
         filter_columns (str): Columns to filter from the header (default: None).
         header_exists (int): Indicates if the header exists in the input file (default: 1).
@@ -53,30 +55,9 @@ def process_rmlst_data(
 
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"The input file {input_path} does not exist.")
-    if os.stat(input_path).st_size > 0:
-        # df.import_data(input_path, file_type='tsv', add_header=add_header)
-        with open(input_path) as rmlst_json:
-            rmlst_dict = json.load(rmlst_json)
-        rmlst_dict.pop("exact_matches")  # remove the big section with data per contig
-        taxon_prediction_df = pd.json_normalize(
-            rmlst_dict["taxon_prediction"]
-        )  # this dict is a list and may contain several entries
 
-        # print(taxon_prediction_df)
-        def concatenate_vector(vector: list, sep=",") -> str:
-            return ",".join([str(i) for i in vector])
-
-        taxon_prediction_df = (
-            taxon_prediction_df.apply(concatenate_vector, axis=0).to_frame().T
-        )  # concatenate the list into one line
-        # print(rmlst_dict['taxon_prediction'])
-        # fields_df = pd.Series(rmlst_dict['fields']).to_frame().T # some samples don't get this object, skip it
-        # TODO: concatenate df, put it in to the scuffed povilas object and then carry on
-        # print(fields_df)
-        # print(taxon_prediction_df)
-        # conc_df = pd.concat((fields_df, taxon_prediction_df), axis=1)
-        conc_df = taxon_prediction_df
-        df.df = conc_df
+    if parsed:
+        df.import_data(input_path, file_type="tsv")
 
         if filter_columns:
             df.filter_columns(filter_columns)
@@ -84,20 +65,51 @@ def process_rmlst_data(
         if replace_header:
             df.rename_header(replace_header)
 
-        # df.show()
-
         df.export_data(output_path, file_type="tsv")
+
     else:
-        empty_df = pd.DataFrame(
-            columns=[col.strip() for col in replace_header.split(",")]
-        )
-        empty_df.to_csv(output_path, index=False)
+        if os.stat(input_path).st_size > 0:
+            # df.import_data(input_path, file_type='tsv', add_header=add_header)
+            with open(input_path) as rmlst_json:
+                rmlst_dict = json.load(rmlst_json)
+            rmlst_dict.pop(
+                "exact_matches"
+            )  # remove the big section with data per contig
+            taxon_prediction_df = pd.json_normalize(
+                rmlst_dict["taxon_prediction"]
+            )  # this dict is a list and may contain several entries
+
+            # print(taxon_prediction_df)
+            def concatenate_vector(vector: list, sep=",") -> str:
+                return ",".join([str(i) for i in vector])
+
+            taxon_prediction_df = (
+                taxon_prediction_df.apply(concatenate_vector, axis=0).to_frame().T
+            )  # concatenate the list
+            conc_df = taxon_prediction_df
+            df.df = conc_df
+
+            if filter_columns:
+                df.filter_columns(filter_columns)
+
+            if replace_header:
+                df.rename_header(replace_header)
+
+            # df.show()
+
+            df.export_data(output_path, file_type="tsv")
+        else:
+            empty_df = pd.DataFrame(
+                columns=[col.strip() for col in replace_header.split(",")]
+            )
+            empty_df.to_csv(output_path, index=False)
 
 
 @call_parse
 def process_rmlst_data_from_cli(
     input_path: str,
     output_path: str = "./output.tsv",
+    parsed: bool = False,
     replace_header: str = None,
     filter_columns: str = None,
     add_header: str = None,

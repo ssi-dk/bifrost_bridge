@@ -156,10 +156,7 @@ def process_qc_data(
         if not os.path.exists(rmlst_path):
             raise FileNotFoundError(f"File not found: {rmlst_path}")
         process_rmlst_data(
-            input_path=rmlst_path,
-            output_path="parsed_rmlst.tsv",
-            filter_columns="taxon,rank,support",
-            replace_header="rMLST_match,rMLST_rank,rMLST_support",
+            input_path=rmlst_path, output_path="parsed_rmlst.tsv", parsed=True
         )
 
     if shovill_path is not None:

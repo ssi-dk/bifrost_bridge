@@ -4,14 +4,9 @@
 __all__ = ['process_amrfinderplus_data', 'process_amrfinderplus_data_from_cli']
 
 # %% ../nbs/06_amrfinderplus.ipynb 2
-# That export there, it makes sure this code goes into the module.
-
 # standard libs
 import os
 import re
-
-# Common to template
-# add into settings.ini, requirements, package name is python-dotenv, for conda build ensure `conda config --add channels conda-forge`
 import dotenv  # for loading config from .env files, https://pypi.org/project/python-dotenv/
 import envyaml  # Allows to loads env vars into a yaml file, https://github.com/thesimj/envyaml
 import fastcore  # To add functionality related to nbdev development, https://github.com/fastai/fastcore/
@@ -21,7 +16,7 @@ from fastcore import (
 from fastcore.script import (
     call_parse,
 )  # for @call_parse, https://fastcore.fast.ai/script
-import json  # for nicely printing json and yaml
+import json
 from fastcore import test
 from . import core
 
@@ -55,7 +50,7 @@ def process_amrfinderplus_data(
     df.import_data(input_path, file_type="tsv", add_header=add_header)
 
     def concatenate_vector(x, sep=","):
-        return ",".join([str(i) for i in x])
+        return sep.join([str(i) for i in x])
 
     df_agg = df.df.apply(concatenate_vector, axis=0)
     df.df = df_agg.to_frame().T
