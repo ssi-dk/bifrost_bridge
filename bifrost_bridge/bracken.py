@@ -66,20 +66,40 @@ def process_bracken_data(
     df.df = df.df.head(3)
 
     df_output = core.DataFrame()
-    df_output.df = pd.DataFrame(
-        {
-            "species1_unclassified_name": [df.df.iloc[1]["name"] + " + unclassified"],
-            "species1_unclassified_pct": [
-                df.df.iloc[1]["%ofreads"] + df.df.iloc[0]["%ofreads"]
-            ],
-            "species1_name": [df.df.iloc[1]["name"]],
-            "species1_pct": [df.df.iloc[1]["%ofreads"]],
-            "species2_name": [df.df.iloc[2]["name"]],
-            "species2_pct": [df.df.iloc[2]["%ofreads"]],
-            "unclassified_name": [df.df.iloc[0]["name"]],
-            "unclassified_pct": [df.df.iloc[0]["%ofreads"]],
-        }
-    )
+    if len(df.df) > 2 and df.df.iloc[2]["name"]:
+        df_output.df = pd.DataFrame(
+            {
+                "species1_unclassified_name": [
+                    df.df.iloc[1]["name"].lstrip() + " + unclassified"
+                ],
+                "species1_unclassified_pct": [
+                    df.df.iloc[1]["%ofreads"] + df.df.iloc[0]["%ofreads"]
+                ],
+                "species1_name": [df.df.iloc[1]["name"].lstrip()],
+                "species1_pct": [df.df.iloc[1]["%ofreads"]],
+                "species2_name": [df.df.iloc[2]["name"].lstrip()],
+                "species2_pct": [df.df.iloc[2]["%ofreads"]],
+                "unclassified_name": [df.df.iloc[0]["name"].lstrip()],
+                "unclassified_pct": [df.df.iloc[0]["%ofreads"]],
+            }
+        )
+    else:
+        df_output.df = pd.DataFrame(
+            {
+                "species1_unclassified_name": [
+                    df.df.iloc[1]["name"].lstrip() + " + unclassified"
+                ],
+                "species1_unclassified_pct": [
+                    df.df.iloc[1]["%ofreads"] + df.df.iloc[0]["%ofreads"]
+                ],
+                "species1_name": [df.df.iloc[1]["name"].lstrip()],
+                "species1_pct": [df.df.iloc[1]["%ofreads"]],
+                "species2_name": [""],
+                "species2_pct": [""],
+                "unclassified_name": [df.df.iloc[0]["name"].lstrip()],
+                "unclassified_pct": [df.df.iloc[0]["%ofreads"]],
+            }
+        )
 
     if replace_header:
         df_output.rename_header(replace_header)
