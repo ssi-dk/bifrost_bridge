@@ -401,6 +401,8 @@ def import_data(self, file_path, file_type="csv", add_header=""):
         self.df = pd.read_csv(
             file_path, delimiter=",", header=None if add_header else 0, index_col=False
         )
+        if len(self.df) == 0:
+            self.df = pd.read_csv(file_path, delimiter=",", header=None)
         if add_header:
             if len(add_header) != len(self.df.columns):
                 raise ValueError(
@@ -413,6 +415,8 @@ def import_data(self, file_path, file_type="csv", add_header=""):
         self.df = pd.read_csv(
             file_path, delimiter="\t", header=None if add_header else 0, index_col=False
         )
+        if len(self.df) == 0:
+            self.df = pd.read_csv(file_path, delimiter="\t", header=None)
         if add_header:
             if len(add_header) != len(self.df.columns):
                 raise ValueError(

@@ -52,13 +52,16 @@ def process_ssiamb_data(
 
     df.import_data(input_path, file_type="tsv")
 
+    if df.df.isna().iloc[0, 0]:
+        with open(output_path, "w") as f:
+            f.write("")
+        return
+
     if filter_columns:
         df.filter_columns(filter_columns)
 
     if replace_header:
         df.rename_header(replace_header)
-
-    # df.show()
 
     df.export_data(output_path, file_type="tsv")
 

@@ -55,6 +55,12 @@ def process_quast_data(
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"The input file {input_path} does not exist.")
 
+    df.import_data(input_path, file_type="tsv")
+    if df.df.isna().iloc[0, 0]:
+        with open(output_path, "w") as f:
+            f.write("")
+        return
+
     if transpose:
         df.import_data(
             input_path, file_type="tsv", add_header=["column_names", "values"]
