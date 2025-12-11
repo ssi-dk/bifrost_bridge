@@ -31,7 +31,6 @@ def process_plasmidfinder_data(
     output_path: str = "./output.tsv",
     replace_header: str = None,
     filter_columns: str = None,
-    add_header: str = None,
     convert_coverage: bool = False,
     filter_contig: bool = False,
 ):
@@ -46,8 +45,6 @@ def process_plasmidfinder_data(
         output_path (str): Path to the output file (default: './output.tsv').
         replace_header (str): Header to replace the existing header (default: None).
         filter_columns (str): Columns to filter from the header (default: None).
-        header_exists (int): Indicates if the header exists in the input file (default: 1).
-        add_header (str): Header to add if the header does not exist in the input file (default: None).
         convert_coverage (bool): If True, converts coverage values in the 'Query / Template length' column to percentages (default: False).
         filter_contig (bool): If True, filters out 'Contig' column to just contig number (default: False).
     """
@@ -63,13 +60,10 @@ def process_plasmidfinder_data(
             f.write("")
         return
 
-    df.import_data(input_path, file_type="tsv", add_header=add_header)
-
-    def concatenate_vector(x, sep=","):
-        return ",".join([str(i) for i in x])
-
-    df_agg = df.df.apply(concatenate_vector, axis=0)
-    df.df = df_agg.to_frame().T
+    # If only one row, we assume its the header
+    if df.df.shape[0] == 1 and list(df.df.columns) == list(range(df.df.shape[1])):
+        df.df.columns = df.df.iloc[0]
+        df.df = df.df.iloc[1:]
 
     # PFinder_Coverage contains value like "152 / 152,682 / 682", thats two values separated by commas, I would like to divide first number by second number and replaces the value with the result
     def process_coverage(val):
@@ -115,8 +109,6 @@ def process_plasmidfinder_data(
     if replace_header:
         df.rename_header(replace_header)
 
-    # df.show()
-
     df.export_data(output_path, file_type="tsv")
 
 
@@ -126,7 +118,6 @@ def process_plasmidfinder_data_from_cli(
     output_path: str = "./output.tsv",
     replace_header: str = None,
     filter_columns: str = None,
-    add_header: str = None,
     convert_coverage: bool = False,
     filter_contig: bool = False,
 ):
@@ -135,7 +126,6 @@ def process_plasmidfinder_data_from_cli(
         output_path,
         replace_header,
         filter_columns,
-        add_header,
         convert_coverage,
         filter_contig,
     )

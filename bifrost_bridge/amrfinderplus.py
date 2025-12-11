@@ -26,7 +26,6 @@ def process_amrfinderplus_data(
     output_path: str = "./output.tsv",
     replace_header: str = None,
     filter_columns: str = None,
-    add_header: str = None,
 ):
     """
     Command-line interface for processing amrfinderplus data.
@@ -39,8 +38,6 @@ def process_amrfinderplus_data(
         output_path (str): Path to the output file (default: './output.tsv').
         replace_header (str): Header to replace the existing header (default: None).
         filter_columns (str): Columns to filter from the header (default: None).
-        header_exists (int): Indicates if the header exists in the input file (default: 1).
-        add_header (str): Header to add if the header does not exist in the input file (default: None).
     """
 
     df = core.DataFrame()
@@ -49,18 +46,15 @@ def process_amrfinderplus_data(
         raise FileNotFoundError(f"The input file {input_path} does not exist.")
 
     df.import_data(input_path, file_type="tsv")
-    if df.df.isna().iloc[0, 0]:
+    if df.df.isna().iloc[0, 0] and len(df.df.columns) == 1:
         with open(output_path, "w") as f:
             f.write("")
         return
 
-    df.import_data(input_path, file_type="tsv", add_header=add_header)
-
-    def concatenate_vector(x, sep=","):
-        return sep.join([str(i) for i in x])
-
-    df_agg = df.df.apply(concatenate_vector, axis=0)
-    df.df = df_agg.to_frame().T
+    # If only one row, we assume its the header
+    if df.df.shape[0] == 1 and list(df.df.columns) == list(range(df.df.shape[1])):
+        df.df.columns = df.df.iloc[0]
+        df.df = df.df.iloc[1:]
 
     if filter_columns:
         df.filter_columns(filter_columns)
@@ -79,8 +73,5 @@ def process_amrfinderplus_data_from_cli(
     output_path: str = "./output.tsv",
     replace_header: str = None,
     filter_columns: str = None,
-    add_header: str = None,
 ):
-    process_amrfinderplus_data(
-        input_path, output_path, replace_header, filter_columns, add_header
-    )
+    process_amrfinderplus_data(input_path, output_path, replace_header, filter_columns)
