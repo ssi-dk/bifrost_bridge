@@ -1,0 +1,202 @@
+[
+  {
+    "objectID": "04_quast.html",
+    "href": "04_quast.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_quast_data_from_cli\n\n process_quast_data_from_cli (input_path:str,\n                              output_path:str='./output.tsv',\n                              add_header:str='', replace_header:str=None,\n                              filter_columns:str=None,\n                              transpose:bool=True)\n\n\nsource\n\n\nprocess_quast_data\n\n process_quast_data (input_path:str, output_path:str='./output.tsv',\n                     add_header:str='', replace_header:str=None,\n                     filter_columns:str=None, transpose:bool=True)\n\n*Process QUAST data.\nThis function processes QUAST data files by importing the data, optionally replacing the header, transposing the data, filtering columns, and exporting the processed data to an output file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None). transpose (bool): Whether to transpose the data (default: True).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "04_quast.html"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "Global static vars",
+    "section": "",
+    "text": "For help with the Markdown language, see this guide.",
+    "crumbs": [
+      "Global static vars"
+    ]
+  },
+  {
+    "objectID": "core.html#libraries",
+    "href": "core.html#libraries",
+    "title": "Global static vars",
+    "section": "Libraries",
+    "text": "Libraries\nCurrently all libraries included are listed at the top and calls to them are also made in the block of code that uses them. This is for readability and the performance hit of the import is negligible.",
+    "crumbs": [
+      "Global static vars"
+    ]
+  },
+  {
+    "objectID": "core.html#config",
+    "href": "core.html#config",
+    "title": "Global static vars",
+    "section": "Config",
+    "text": "Config\nOur config file holds all program and user specific variables. This is a good practice to follow as it allows us to easily change variables without having to change code. It also allows us to easily change variables based on the environment we are running in. For example, we may want to run a program in a test environment with a different database than we would in production. This is also a good practice to follow as it allows us to easily change variables without having to change code. It also allows us to easily change variables based on the environment we are running in. For example, we may want to run a program in a test environment with a different database than we would in production.\nConfiguration is templated to rely on environment (ENV) variables. A default ENV config is provided in ./config/config.default.env and more advanced data structures are supported in ./config/config.default.yaml. The .yaml file is meant to represent what your program actually works with and the .env file options the user can change at run time.\nMake sure you know the priority of variables and check on them when debugging your code. Also ensure that your yaml file is referenced appropriately in the .env file.\nWhen in use there’s an expectation you’ll have multiple config files for different use cases e.g. development, production environment for different paths, etc.\n\nset env variables\nA helper function for getting your config values, this will set the environment variables with the provided .env values. If you’re missing values it’ll ensure they’re loaded in with the defaults file.\n\nsource\n\n\nset_env_variables\n\n set_env_variables (config_path:str, overide_env_vars:bool=True)\n\n\n\nget config\nWhen you run this function, assuming things are set up properly, you end up with a dict that matches your .yaml file. This file will have all the inputs for the package and settings of your program.\nTo do this it will use a .env config file, which has an associated yaml file defined with CORE_YAML_CONFIG_FILE in the .env file. And then use the .env file to load values into the associated .yaml file.\n\nsource\n\n\nget_config\n\n get_config (config_path:str=None, overide_env_vars:bool=True)\n\n\n\nVariables\nAll the user input variables and machine adjustable variables should be in your config, which is a dict. Reference config.default.yaml for how to access your variables. Also note that with python dicts you can use dict_variable.get(\"variable\", default_value) to ensure that you don’t get a key error if the variable is not set.\n\n\nshow project env vars\nA helper function intended to only be used with debugging. It shows all your project specific environmental variables.\n\nsource\n\n\nshow_project_env_vars\n\n show_project_env_vars (config:dict)",
+    "crumbs": [
+      "Global static vars"
+    ]
+  },
+  {
+    "objectID": "core.html#get_samplesheet",
+    "href": "core.html#get_samplesheet",
+    "title": "Global static vars",
+    "section": "get_samplesheet",
+    "text": "get_samplesheet\nThis function is to unify the way we work with sample_sheet’s which is for us a file with a table of values, typically samples for batch processing. We want to approach doing it this way so all programs have batch processing in mind and working with the same data structure.\nTo make use of it we have a small sample_sheet yaml object which looks like\nsample_sheet:\n    path: path/to/sample_sheet.tsv\n    delimiter: '\\t' # Optional, will assume , for csv and \\t otherwises\n    header: 0 # Optional, 0 indicates first row is header, None indicates no header\n    columns: ['column1', 'column2', 'column3'] # Optional, if not provided all columns will be used\nMake sure to add that to your relevant section in your config (can be multiple times if you’re working with different sheets or different columns), then call the function on this object and it’ll either mention somethings wrong or return a pandas dataframe with the columns of interest.\nThis is an example of a common sample_sheet we work with. We will ingest the hash at the beginning so it doesn’t affect column naming. Extra empty rows at the end are also stripped.\n#sample_id  file_path   metadata1   metadata2\nSample1 /path/to/sample1.fasta  value1  option1\nSample2 /path/to/sample2.fasta  value2  option2\nSample3 /path/to/sample3.fasta  value3  option1\nSample4 /path/to/sample4.fasta  value1  option2\nSample5 /path/to/sample5.fasta  value2  option1\n\nsource\n\nget_samplesheet\n\n get_samplesheet (sample_sheet_config:dict)\n\nThe functions below are not tempalted and you should adjust this with your own code. It’s included as an example of how to code some functions with associated tests and how to make it work on the command line. It is best to code by creating a new workbook and then importing the functions of this into that one.\n\nsource\n\n\nhello_world\n\n hello_world (name:str='Not given')\n\nThis here is a a test as part of fastcore.test, all fastcore tests will be automatically run when doing nbdev_test as well as through github actions.\n\ntest.test_eq(\"Hello World! My name is Kim\", hello_world(\"Kim\"))\n\nThe @call_parse will, with the settings.ini entry way, automatically transform your function into a command line tool. Comments of the functions will appear for help messages and the initial docstring will appear in the help as well. You can also define defaults for the arguments and should define a typehint to control inputs. The function will likely have to resolve variables with ENV vars and config files. The recommended way to do this is to assume variables passed here are a higher priority.\n\nsource\n\n\ncli\n\n cli (name:str, config_file:str=None)\n\nThis will print Hello World! with your name\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nname\nstr\n\nYour name\n\n\nconfig_file\nstr\nNone\nconfig file to set env vars from\n\n\n\nTest the function with potentially variable input to confirm output\n\ntest.test_eq(\n    \"Hello World! My name is Kim\", hello_world(config[\"example\"][\"input\"][\"name\"])\n)\ntest.test_eq(None, cli(\"Kim\"))\n\nHello World! My name is Kim\n\n\n\ncli(config[\"example\"][\"input\"][\"name\"])\ncli(config[\"example\"][\"input\"][\"alternative_name\"])\n\nHello World! My name is Kim\nHello World! My name is Lee\n\n\nCreating DataFrame object\n\nsource\n\n\nDataFrame\n\n DataFrame (data=None)\n\nInitialize the DataFrame object. :param data: Optional initial data for the DataFrame.\nHelper functions to deal with json imports and exports\n\nsource\n\n\nexport_nested_json_data\n\n export_nested_json_data (json_file_path)\n\nExport the DataFrame to a nested JSON file by unraveling headers with underscores. :param json_file_path: Path to the JSON file.\n\nsource\n\n\nimport_nested_json_data\n\n import_nested_json_data (json_file_path)\n\nImport nested JSON data from a file and create headers by combining headers with underscores. :param json_file_path: Path to the JSON file.\nHelper functions to deal with xml imports and exports\n\nsource\n\n\nexport_nested_xml_data\n\n export_nested_xml_data (xml_file_path)\n\n\nsource\n\n\nimport_nested_xml_data\n\n import_nested_xml_data (xml_file_path)\n\nImport nested XML data from a file and create headers by combining headers with underscores. :param xml_file_path: Path to the XML file.\nDefinining base functions for DataFrame object import_data export_data rename_header filter_rows filter_columns show print_header\n\nsource\n\n\nshow\n\n show ()\n\nDisplay the DataFrame.\n\nsource\n\n\nprint_header\n\n print_header ()\n\nPrint the header of the DataFrame as a list.\n\nsource\n\n\nadd_column\n\n add_column (column_name, data)\n\nAdd a new column to the DataFrame. :param column_name: Name of the new column. :param data: Data for the new column (must match the number of rows).\n\nsource\n\n\nexport_data\n\n export_data (file_path, file_type='csv')\n\nExport data to a CSV, TSV, JSON, YAML, or XML file. :param file_path: Path to the file. :param file_type: Type of the file (‘csv’, ‘tsv’, ‘json’, ‘yaml’, ‘xml’). :param delimiter: Delimiter to use in the file (default is comma for CSV/TSV).\n\nsource\n\n\nfilter_rows\n\n filter_rows (condition)\n\nFilter the DataFrame to include only rows that meet the condition. :param condition: List of integers (row indices starting with 1) or list of boolean values.\n\nsource\n\n\nfilter_columns\n\n filter_columns (columns)\n\nFilter the DataFrame to include only specified columns. :param columns: List of columns to include or list of boolean values.\n\nsource\n\n\nrename_header\n\n rename_header (new_columns)\n\nRename columns in the DataFrame. :param new_columns: Comma-separated string of new column names.\n\nsource\n\n\nimport_data\n\n import_data (file_path, file_type='csv', add_header='')\n\nImport data from a CSV, TSV, JSON, XML, or YAML file. :param file_path: Path to the file. :param file_type: Type of the file (‘csv’, ‘tsv’, ‘json’, ‘xml’, ‘yaml’). :param delimiter: Delimiter used in the file (default is comma for CSV).\nStatus curently: full csv, tsv, json support partial xml and yaml support",
+    "crumbs": [
+      "Global static vars"
+    ]
+  },
+  {
+    "objectID": "99_bifrost.html",
+    "href": "99_bifrost.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_qc_data\n\n process_qc_data (mlst_path:str=None, fastp_path:str=None,\n                  quast_path:str=None, plasmidfinder_path:str=None,\n                  bracken_path:str=None, amrfinder_path:str=None,\n                  amrfinder_version_path:str=None, pmlst_path:str=None,\n                  rmlst_path:str=None, shovill_path:str=None,\n                  ssiamb_path:str=None, combine_output:bool=True,\n                  output_path:str='./output.tsv')\n\n*Command-line interface for processing QC data.\nThis function processes MLST, FASTP, QUAST, PlasmidFinder, and Bracken data files based on the provided command-line arguments. It supports specifying input file paths for MLST, FASTP, QUAST, PlasmidFinder, and Bracken data, and outputs the processed data to specified paths.\nArguments: mlst_path (str): Path to the MLST input file. fastp_path (str): Path to the FASTP input file. quast_path (str): Path to the QUAST input file. plasmidfinder_path (str): Path to the PlasmidFinder input file. bracken_path (str): Path to the Bracken input file. amrfinder_path (str): Path to the AMRFinder input file. amrfinder_version_path (str): Path to the AMRFinder version file. pmlst_path (str): Path to the PMLST input file. shovill_path (str): Path to the Shovill input file. rmlst_path (str): Path to the rMLST input file. ssiamb_path (str): Path to the SSIAMB input file. combine_output (bool): Whether to combine all outputs into a single file (default: True output_path (str): Path to the output file (default: ‘./output.tsv’).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "99_bifrost.html"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "bifrost_bridge"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "bifrost_bridge",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall bifrost_bridge in Development mode\n# make sure bifrost_bridge package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to bifrost_bridge\n$ nbdev_prepare",
+    "crumbs": [
+      "bifrost_bridge"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "bifrost_bridge",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/$GIT_USER_NAME/bifrost_bridge.git\nor from conda\n$ conda install -c $GIT_USER_NAME bifrost_bridge\nor from pypi\n$ pip install bifrost_bridge\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "bifrost_bridge"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "bifrost_bridge",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "bifrost_bridge"
+    ]
+  },
+  {
+    "objectID": "08_pmlst.html",
+    "href": "08_pmlst.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_pmlst_data_from_cli\n\n process_pmlst_data_from_cli (input_path:str,\n                              output_path:str='./output.tsv',\n                              filter_columns:str=None,\n                              replace_header:str=None)\n\n\nsource\n\n\nprocess_pmlst_data\n\n process_pmlst_data (input_path:str, output_path:str='./output.tsv',\n                     filter_columns:str=None, replace_header:str=None)\n\n*Command-line interface for processing PMLST data.\nThis function sets up an argument parser to handle command-line arguments for processing PMLST data files. It supports specifying input and output file paths, replacing headers, filtering columns, and handling the presence or absence of headers in the input file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). filter_columns (str): Columns to filter from the header (default: None). replace_header (str): New header to replace the existing one (default: None).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "08_pmlst.html"
+    ]
+  },
+  {
+    "objectID": "11_ssiamb.html",
+    "href": "11_ssiamb.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_ssiamb_data_from_cli\n\n process_ssiamb_data_from_cli (input_path:str,\n                               output_path:str='./output.tsv',\n                               filter_columns:str=None,\n                               replace_header:str=None)\n\n\nsource\n\n\nprocess_ssiamb_data\n\n process_ssiamb_data (input_path:str, output_path:str='./output.tsv',\n                      filter_columns:str=None, replace_header:str=None)\n\n*Command-line interface for processing SSIAMB data.\nThis function sets up an argument parser to handle command-line arguments for processing SSIAMB data files. It supports specifying input and output file paths, replacing headers, filtering columns, and handling the presence or absence of headers in the input file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). filter_columns (str): Columns to filter from the header (default: None). replace_header (str): New header to replace the existing one (default: None).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "11_ssiamb.html"
+    ]
+  },
+  {
+    "objectID": "09_rmlst.html",
+    "href": "09_rmlst.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_rmlst_data_from_cli\n\n process_rmlst_data_from_cli (input_path:str,\n                              output_path:str='./output.tsv',\n                              parsed:bool=False, replace_header:str=None,\n                              filter_columns:str=None,\n                              add_header:str=None)\n\n\nsource\n\n\nprocess_rmlst_data\n\n process_rmlst_data (input_path:str, output_path:str='./output.tsv',\n                     parsed:bool=False, replace_header:str=None,\n                     filter_columns:str=None, add_header:str=None)\n\n*Command-line interface for processing rmlst data.\nThis function sets up an argument parser to handle command-line arguments for processing rmlst data files. It supports specifying input and output file paths, replacing headers, filtering columns, and handling the presence or absence of headers in the input file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). parsed (bool): Indicates if the input file is already parsed (default: False). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None). header_exists (int): Indicates if the header exists in the input file (default: 1). add_header (str): Header to add if the header does not exist in the input file (default: None).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "09_rmlst.html"
+    ]
+  },
+  {
+    "objectID": "05_plasmidfinder.html",
+    "href": "05_plasmidfinder.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_plasmidfinder_data_from_cli\n\n process_plasmidfinder_data_from_cli (input_path:str,\n                                      output_path:str='./output.tsv',\n                                      replace_header:str=None,\n                                      filter_columns:str=None,\n                                      convert_coverage:bool=False,\n                                      filter_contig:bool=False)\n\n\nsource\n\n\nprocess_plasmidfinder_data\n\n process_plasmidfinder_data (input_path:str,\n                             output_path:str='./output.tsv',\n                             replace_header:str=None,\n                             filter_columns:str=None,\n                             convert_coverage:bool=False,\n                             filter_contig:bool=False)\n\n*Command-line interface for processing plasmidfinder data.\nThis function sets up an argument parser to handle command-line arguments for processing plasmidfinder data files. It supports specifying input and output file paths, replacing headers, filtering columns, and handling the presence or absence of headers in the input file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None). convert_coverage (bool): If True, converts coverage values in the ‘Query / Template length’ column to percentages (default: False). filter_contig (bool): If True, filters out ‘Contig’ column to just contig number (default: False).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "05_plasmidfinder.html"
+    ]
+  },
+  {
+    "objectID": "06_amrfinderplus.html",
+    "href": "06_amrfinderplus.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_amrfinderplus_data_from_cli\n\n process_amrfinderplus_data_from_cli (input_path:str,\n                                      output_path:str='./output.tsv',\n                                      replace_header:str=None,\n                                      filter_columns:str=None)\n\n\nsource\n\n\nprocess_amrfinderplus_data\n\n process_amrfinderplus_data (input_path:str,\n                             output_path:str='./output.tsv',\n                             replace_header:str=None,\n                             filter_columns:str=None)\n\n*Command-line interface for processing amrfinderplus data.\nThis function sets up an argument parser to handle command-line arguments for processing amrfinderplus data files. It supports specifying input and output file paths, replacing headers, filtering columns, and handling the presence or absence of headers in the input file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "06_amrfinderplus.html"
+    ]
+  },
+  {
+    "objectID": "07_bracken.html",
+    "href": "07_bracken.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_bracken_data_from_cli\n\n process_bracken_data_from_cli (input_path:str,\n                                output_path:str='./output.tsv',\n                                add_header:str='%ofreads, reads, notsure,\n                                rank, taxid, name',\n                                replace_header:str=None,\n                                filter_columns:str=None)\n\n\nsource\n\n\nprocess_bracken_data\n\n process_bracken_data (input_path:str, output_path:str='./output.tsv',\n                       add_header:str='%ofreads, reads, notsure, rank,\n                       taxid, name', replace_header:str=None,\n                       filter_columns:str=None, transpose:bool=True)\n\n*Process Bracken data.\nThis function processes Bracken data files by importing the data, optionally replacing the header, transposing the data, filtering columns, and exporting the processed data to an output file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None). transpose (bool): Whether to transpose the data (default: True).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "07_bracken.html"
+    ]
+  },
+  {
+    "objectID": "01_cli.html",
+    "href": "01_cli.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Normally your imports go into Project specific libraries above, but we’ll put it in a code block here. In this example you’ll want to comment out the code below, because YOUR_REPO_NAME changes with each repository, it’ll cause issues if you try to run it with a different repository name\nBecause the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n\nconfig = core.get_config()  # This will load the .env file and print the config\n\n\nsource\n\ncli\n\n cli (name:str=None, alternative_name:str=None, config_file:str=None)\n\nThis will print Hello World! with your name\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nname\nstr\nNone\nA name\n\n\nalternative_name\nstr\nNone\nAn alternative name\n\n\nconfig_file\nstr\nNone\nconfig file to set env vars from\n\n\nReturns\nNone\n\n\n\n\n\nSo now that it exists lets add it to our settings.ini, the console_scripts section, once edited by you should look like\nconsole_scripts =\n    core_hello_world=template_nbdev_example.core:hello_world\n    hello_two_world=template_nbdev_example.hello_world:cli\nnow you’ll need to run nbdev_prepare to turn this into a module and gain access to your new commands, if your commands aren’t showing up ensure you’ve run python -m pip install -e '.[dev]' in your ./venv\nThe ! lets you run on the command line, so the following block only works if everything above is successful. Remember to restart your kernel if you make changes to the module.\n\n!hello_two_world\n\nHello Kim and Lee!\n\n\nWith some different values\n\n!hello_two_world --name \"John\" --alternative_name \"Jane\"\n\nHello John and Jane!\n\n\nTry using an alternative config as well\n\n!hello_two_world --config_file \"./config.default.env\"\n\nHello Kim and Lee!\n\n\nNice, you can also run these through the notebook as a function\n\ncli(name=\"John\", alternative_name=\"Jane\", config_file=\"./config.default.env\")\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[11], line 1\n----&gt; 1 cli(name=\"John\", alternative_name=\"Jane\", config_file=\"./config.default.env\")\n\nFile ~/vscode_storage/ssi-dk/bifrost_bridge/.venv/lib/python3.11/site-packages/fastcore/script.py:112, in call_parse.&lt;locals&gt;._f(*args, **kwargs)\n    109 @wraps(func)\n    110 def _f(*args, **kwargs):\n    111     mod = inspect.getmodule(inspect.currentframe().f_back)\n--&gt; 112     if not mod: return func(*args, **kwargs)\n    113     if not SCRIPT_INFO.func and mod.__name__==\"__main__\": SCRIPT_INFO.func = func.__name__\n    114     if len(sys.argv)&gt;1 and sys.argv[1]=='': sys.argv.pop(1)\n\nCell In[7], line 20, in cli(name, alternative_name, config_file)\n     17 if alternative_name is not None:\n     18     config[\"example\"][\"input\"][\"alternative_name\"] = alternative_name\n---&gt; 20 print(hello_two_world(\n     21     config[\"example\"][\"input\"][\"name\"],\n     22     config[\"example\"][\"input\"][\"alternative_name\"],\n     23 ))\n\nNameError: name 'hello_two_world' is not defined\n\n\n\nLets add a test here as well, which will get run through ./.github/workflows/test.yaml whenever changes happen to the repository\n\ntest.test_eq(\n    None,\n    cli(name=\"John\", alternative_name=\"Jane\", config_file=\"./config.default.env\"),\n)",
+    "crumbs": [
+      "01_cli.html"
+    ]
+  },
+  {
+    "objectID": "10_shovill.html",
+    "href": "10_shovill.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_shovill_data_from_cli\n\n process_shovill_data_from_cli (input_path:str,\n                                output_path:str='./output.tsv',\n                                average_coverage:float=True)\n\n\nsource\n\n\nprocess_shovill_data\n\n process_shovill_data (input_path:str, output_path:str='./output.tsv',\n                       average_coverage:float=True)\n\n*Command-line interface for processing Shovill data.\nThis function sets up an argument parser to handle command-line arguments for processing Shovill log output files. It supports specifying input and output file paths.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). average_coverage (float): Whether to calculate average coverage (default: True).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "10_shovill.html"
+    ]
+  },
+  {
+    "objectID": "03_fastp.html",
+    "href": "03_fastp.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_fastp_data_from_cli\n\n process_fastp_data_from_cli (input_path:str,\n                              output_path:str='./output.tsv',\n                              replace_header:str=None,\n                              filter_columns:str=None)\n\n\nsource\n\n\nprocess_fastp_data\n\n process_fastp_data (input_path:str, output_path:str='./output.tsv',\n                     replace_header:str=None, filter_columns:str=None)\n\n*Command-line interface for processing MLST data.\nThis function sets up an argument parser to handle command-line arguments for processing FASTP data files. It supports specifying input and output file paths, replacing headers, filtering columns.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "03_fastp.html"
+    ]
+  },
+  {
+    "objectID": "02_mlst.html",
+    "href": "02_mlst.html",
+    "title": "bifrost_bridge",
+    "section": "",
+    "text": "Because the notebooks now are located in the nbs folder, we need to change the python wd for the notebook to the project folder. Keep this included in all notebooks but don’t export it to the package.\n\n# This block should never be exported. It is to have python running in the project (and not the nbs) dir, and to initiate the package using pip.\nos.chdir(core.PROJECT_DIR)\n\n##################################################CODE_SEGMENT###########################################\n\nsource\n\nprocess_mlst_data_from_cli\n\n process_mlst_data_from_cli (input_path:str,\n                             output_path:str='./output.tsv',\n                             add_header:str=None, replace_header:str=None,\n                             filter_columns:str=None,\n                             remove_sampleid:bool=False,\n                             combine_alleles:bool=False)\n\n\nsource\n\n\nprocess_mlst_data\n\n process_mlst_data (input_path:str, output_path:str='./output.tsv',\n                    add_header:str=None, replace_header:str=None,\n                    filter_columns:str=None, remove_sampleid:bool=False,\n                    combine_alleles:bool=False)\n\n*Command-line interface for processing MLST data.\nThis function sets up an argument parser to handle command-line arguments for processing MLST data files. It supports specifying input and output file paths, replacing headers, filtering columns, and handling the presence or absence of headers in the input file.\nArguments: input_path (str): Path to the input file. output_path (str): Path to the output file (default: ‘./output.tsv’). add_header (str): Header to add if the header does not exist in the input file (default: None). replace_header (str): Header to replace the existing header (default: None). filter_columns (str): Columns to filter from the header (default: None). remove_sampleid (bool): Whether to remove the SampleID column (default: False). combine_alleles (bool): Whether to combine allele columns into one (default: False).*\n##################################################CODE_SEGMENT###########################################",
+    "crumbs": [
+      "02_mlst.html"
+    ]
+  }
+]
