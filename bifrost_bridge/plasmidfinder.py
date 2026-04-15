@@ -108,6 +108,8 @@ def process_plasmidfinder_data(
     if replace_header:
         df.rename_header(replace_header)
 
+    df = df.collapse_rows()
+
     df.export_data(output_path, file_type='tsv')
 
 @call_parse
