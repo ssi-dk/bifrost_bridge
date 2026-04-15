@@ -1,3 +1,44 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "bifrost_bridge"
+dynamic = ["version"]
+description = "TODO"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [{name = "$GIT_USER_NAME", email = "povilas.matusevicius@gmail.com"}]
+keywords = ['nbdev', 'jupyter', 'notebook', 'python']
+classifiers = ["Natural Language :: English", "Intended Audience :: Developers", "Development Status :: 3 - Alpha", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3 :: Only"]
+dependencies = ['fastcore', 'python_dotenv', 'envyaml', 'pandas', 'black']
+
+[project.urls]
+Repository = "https://github.com/$GIT_USER_NAME/bifrost_bridge"
+Documentation = "https://$GIT_USER_NAME.github.io/bifrost_bridge"
+
+[project.entry-points.nbdev]
+bifrost_bridge = "bifrost_bridge._modidx:d"
+
+
+[project.scripts]
+bridge_mlst = "bifrost_bridge.mlst:process_mlst_data_from_cli"
+bridge_fastp = "bifrost_bridge.fastp:process_fastp_data_from_cli"
+bridge_quast = "bifrost_bridge.quast:process_quast_data_from_cli"
+bridge_plasmidfinder = "bifrost_bridge.plasmidfinder:process_plasmidfinder_data_from_cli"
+bridge_amrfinderplus = "bifrost_bridge.amrfinderplus:process_amrfinderplus_data_from_cli"
+bridge_bracken = "bifrost_bridge.bracken:process_bracken_data_from_cli"
+bridge_pmlst = "bifrost_bridge.pmlst:process_pmlst_data_from_cli"
+bridge_rmlst = "bifrost_bridge.rmlst:process_rmlst_data_from_cli"
+bridge_shovill = "bifrost_bridge.shovill:process_shovill_data_from_cli"
+bridge_ssiamb = "bifrost_bridge.ssiamb:process_ssiamb_data_from_cli"
+bridge_qc = "bifrost_bridge.bifrost:process_qc_data"
+
+[tool.setuptools.dynamic]
+version = {attr = "bifrost_bridge.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["bifrost_bridge"]
+
+[tool.nbdev]
