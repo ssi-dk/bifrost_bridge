@@ -171,3 +171,5 @@ conda/
 /TODO.md
 /AGENTS.md
 /CLAUDE.md
+
+test_data/*_testout*

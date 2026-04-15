@@ -64,6 +64,7 @@ def process_amrfinderplus_data(
         df.rename_header(replace_header)
 
     #df.show()
+    df = df.collapse_rows()
 
     df.export_data(output_path, file_type="tsv")
 

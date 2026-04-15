@@ -4,7 +4,8 @@
 __all__ = ['PACKAGE_NAME', 'DEV_MODE', 'PACKAGE_DIR', 'PROJECT_DIR', 'config', 'set_env_variables', 'get_config',
            'show_project_env_vars', 'get_samplesheet', 'hello_world', 'cli', 'DataFrame', 'import_nested_json_data',
            'export_nested_json_data', 'import_nested_xml_data', 'export_nested_xml_data', 'import_data',
-           'rename_header', 'filter_columns', 'filter_rows', 'export_data', 'add_column', 'print_header', 'show']
+           'rename_header', 'filter_columns', 'filter_rows', 'export_data', 'add_column', 'print_header', 'show',
+           'collapse_rows']
 
 # %% ../nbs/00_core.ipynb #5bf690c0
 # Need the bifrost_bridge for a few functions, this can be considered a static var
@@ -528,6 +529,20 @@ def show(self):
     """
     print(self.df)
 
+# We choose | as delimiter because it's ASCII and we don't think it's used
+# by any of our outputs.
+# This is a workaround; the long term solution is to output in JSON.
+def collapse_rows(self, delimiter:str='|') -> DataFrame:
+    str_df = self.df.fillna("").apply(lambda col: col.map(str))
+
+    if str_df.empty:
+        return DataFrame(str_df)
+
+    if str_df.apply(lambda col: col.str.contains('|', regex=False)).any().any():
+        raise ValueError("Fields contain '|' separator")
+    
+    return DataFrame(str_df.agg('|'.join).to_frame().T)
+
 DataFrame.import_data = import_data
 DataFrame.rename_header = rename_header
 DataFrame.filter_columns = filter_columns
@@ -536,3 +551,4 @@ DataFrame.export_data = export_data
 DataFrame.print_header = print_header
 DataFrame.add_column = add_column
 DataFrame.show = show
+DataFrame.collapse_rows = collapse_rows
