@@ -167,3 +167,7 @@ checklink/cookies.txt
 
 # Conda
 conda/
+
+/TODO.md
+/AGENTS.md
+/CLAUDE.md
