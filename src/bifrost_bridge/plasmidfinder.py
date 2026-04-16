@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from bifrost_bridge._cli import build_parser
+from bifrost_bridge.cli import build_parser
 from bifrost_bridge import core
 
 
