@@ -7,15 +7,15 @@ name = "bifrost_bridge"
 dynamic = ["version"]
 description = "Normalize bioinformatics QC tool outputs into pipeline-friendly TSV summaries"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.15"
 authors = [
     { name = "SSI-DK" },
 ]
-dependencies = ["pandas", "pyyaml"]
+dependencies = ["pandas>=3,<4", "pyyaml>=6,<7"]
 
 [project.optional-dependencies]
-test = ["pytest", "pytest-cov"]
-dev = ["pytest", "pytest-cov", "ruff"]
+test = ["pytest>=9,<10", "pytest-cov>=7,<8"]
+dev = ["pytest>=9,<10", "pytest-cov>=7,<8", "ruff>=0.15.10,<0.16"]
 
 [project.scripts]
 bridge_mlst = "bifrost_bridge.mlst:process_mlst_data_from_cli"
