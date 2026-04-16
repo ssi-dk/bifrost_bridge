@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 from bifrost_bridge.cli import build_parser
