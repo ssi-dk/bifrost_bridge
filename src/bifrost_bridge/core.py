@@ -7,31 +7,6 @@ import pandas as pd
 import yaml
 
 
-def get_samplesheet(sample_sheet_config: dict) -> pd.DataFrame:
-    path = Path(sample_sheet_config["path"])
-    if not path.is_file():
-        raise FileNotFoundError(f"File {path} does not exist")
-
-    delimiter = sample_sheet_config.get("delimiter", "," if path.suffix.lower() == ".csv" else "\t")
-    columns = sample_sheet_config.get("columns")
-
-    try:
-        df = pd.read_csv(path, delimiter=delimiter, header=0, comment=None)
-    except Exception as exc:
-        print(
-            "Error: Could not load sample sheet into dataframe, you have a problem with your sample sheet or the configuration."
-        )
-        raise exc
-
-    if str(df.columns[0]).startswith("#"):
-        df.columns = [str(col).lstrip("#") for col in df.columns]
-    if columns is not None and not all(col in df.columns for col in columns):
-        raise ValueError("Error: Sample sheet does not have the correct columns")
-    if columns is not None:
-        df = df[columns]
-    return df.dropna(how="all")
-
-
 class DataFrame:
     def __init__(self, data=None):
         self.df = pd.DataFrame(data) if data is not None else pd.DataFrame()
@@ -209,25 +184,6 @@ class DataFrame:
         raise ValueError(
             "Error: columns parameter must be a list of column names or a list of boolean values."
         )
-
-    def filter_rows(self, condition) -> None:
-        if all(isinstance(cond, bool) for cond in condition):
-            if len(condition) != len(self.df):
-                raise ValueError(
-                    "Error: Number of boolean values must match the number of rows in the DataFrame."
-                )
-            self.df = self.df[condition]
-        elif all(isinstance(cond, int) for cond in condition):
-            if any(cond < 1 or cond > len(self.df) for cond in condition):
-                raise ValueError(
-                    "Error: One or more row indices are outside the scope of the DataFrame."
-                )
-            self.df = self.df.iloc[[cond - 1 for cond in condition]]
-        else:
-            raise ValueError(
-                "Error: condition parameter must be a list of integers or a list of boolean values."
-            )
-        self.df.index = range(1, len(self.df) + 1)
 
     def export_data(self, file_path: str | Path, file_type: str = "csv") -> None:
         path = Path(file_path)
