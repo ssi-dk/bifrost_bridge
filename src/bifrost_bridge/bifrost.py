@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from bifrost_bridge._cli import build_parser
+from bifrost_bridge.cli import build_parser
 from bifrost_bridge.amrfinderplus import process_amrfinderplus_data
 from bifrost_bridge.bracken import process_bracken_data
 from bifrost_bridge.fastp import process_fastp_data
