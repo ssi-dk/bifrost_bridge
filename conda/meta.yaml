@@ -1,0 +1,40 @@
+{% set name = "bifrost_bridge" %}
+{% set data = load_file_regex(load_file=RECIPE_DIR + "/../src/bifrost_bridge/__init__.py", regex_pattern="__version__\\s*=\\s*['\"]([^'\"]+)['\"]") %}
+{% set version = data.group(1) %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  noarch: python
+  script: python -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python >=3.10
+    - pip
+    - hatchling
+  run:
+    - python >=3.10
+    - pandas
+    - pyyaml
+
+test:
+  imports:
+    - bifrost_bridge
+
+about:
+  home: https://github.com/$GIT_USER_NAME/bifrost_bridge
+  license: MIT
+  license_family: MIT
+  summary: Normalize bioinformatics QC tool outputs into TSV summaries
+  dev_url: https://github.com/$GIT_USER_NAME/bifrost_bridge
+
+extra:
+  recipe-maintainers:
+    - PovilasMat

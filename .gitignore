@@ -165,8 +165,11 @@ checklink/cookies.txt
 # Quarto
 .quarto
 
-# Conda
-conda/
+# Generated parser outputs
+parsed_*.tsv
+
+# Conda build output
+conda-bld/
 
 /TODO.md
 /AGENTS.md

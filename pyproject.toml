@@ -1,26 +1,21 @@
 [build-system]
-requires = ["setuptools>=64"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "bifrost_bridge"
 dynamic = ["version"]
-description = "TODO"
-readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-authors = [{name = "$GIT_USER_NAME", email = "povilas.matusevicius@gmail.com"}]
-keywords = ['nbdev', 'jupyter', 'notebook', 'python']
-classifiers = ["Natural Language :: English", "Intended Audience :: Developers", "Development Status :: 3 - Alpha", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3 :: Only"]
-dependencies = ['fastcore', 'python_dotenv', 'envyaml', 'pandas', 'black']
+description = "Normalize bioinformatics QC tool outputs into pipeline-friendly TSV summaries"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "SSI-DK" },
+]
+dependencies = ["pandas", "pyyaml"]
 
-[project.urls]
-Repository = "https://github.com/$GIT_USER_NAME/bifrost_bridge"
-Documentation = "https://$GIT_USER_NAME.github.io/bifrost_bridge"
-
-[project.entry-points.nbdev]
-bifrost_bridge = "bifrost_bridge._modidx:d"
-
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+dev = ["pytest", "pytest-cov", "ruff"]
 
 [project.scripts]
 bridge_mlst = "bifrost_bridge.mlst:process_mlst_data_from_cli"
@@ -33,12 +28,20 @@ bridge_pmlst = "bifrost_bridge.pmlst:process_pmlst_data_from_cli"
 bridge_rmlst = "bifrost_bridge.rmlst:process_rmlst_data_from_cli"
 bridge_shovill = "bifrost_bridge.shovill:process_shovill_data_from_cli"
 bridge_ssiamb = "bifrost_bridge.ssiamb:process_ssiamb_data_from_cli"
-bridge_qc = "bifrost_bridge.bifrost:process_qc_data"
+bridge_qc = "bifrost_bridge.bifrost:process_qc_data_from_cli"
 
-[tool.setuptools.dynamic]
-version = {attr = "bifrost_bridge.__version__"}
+[project.urls]
+Homepage = "https://github.com/$GIT_USER_NAME/bifrost_bridge"
+Repository = "https://github.com/$GIT_USER_NAME/bifrost_bridge"
 
-[tool.setuptools.packages.find]
-include = ["bifrost_bridge"]
+[tool.hatch.version]
+path = "src/bifrost_bridge/__init__.py"
 
-[tool.nbdev]
+[tool.hatch.build.targets.wheel]
+packages = ["src/bifrost_bridge"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
