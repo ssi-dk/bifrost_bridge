@@ -55,7 +55,7 @@ def process_rmlst_data(
     empty_df = pd.DataFrame(
         columns=[col.strip() for col in (replace_header or "").split(",") if col.strip()]
     )
-    empty_df.to_csv(output_path, index=False)
+    empty_df.to_csv(output_path, index=False, sep="\t")
 
 
 def process_rmlst_data_from_cli() -> None:
