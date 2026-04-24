@@ -4,12 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to publish (e.g., 1.0.0)"
-        required: false
-        default: ""
 
 jobs:
   build-and-publish:
@@ -58,4 +52,4 @@ jobs:
             exit 1
           fi
           echo "Uploading: $PACKAGE"
-          anaconda upload --user <TODO: Add anaconda user> --force "$PACKAGE"
+          anaconda upload --user PovilasMat --force "$PACKAGE"
