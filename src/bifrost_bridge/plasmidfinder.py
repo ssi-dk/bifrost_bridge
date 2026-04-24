@@ -69,11 +69,11 @@ def process_plasmidfinder_data_from_cli() -> None:
                 "names": ["input_path"],
                 "kwargs": {"help": "Path to the input PlasmidFinder TSV file."},
             },
-            {"names": ["--output-path"], "kwargs": {"default": "./output.tsv"}},
-            {"names": ["--replace-header"], "kwargs": {"default": None}},
-            {"names": ["--filter-columns"], "kwargs": {"default": None}},
-            {"names": ["--convert-coverage"], "kwargs": {"action": "store_true"}},
-            {"names": ["--filter-contig"], "kwargs": {"action": "store_true"}},
+            {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
+            {"names": ["--replace_header"], "kwargs": {"default": None}},
+            {"names": ["--filter_columns"], "kwargs": {"default": None}},
+            {"names": ["--convert_coverage"], "kwargs": {"action": "store_true"}},
+            {"names": ["--filter_contig"], "kwargs": {"action": "store_true"}},
         ],
     )
     args = parser.parse_args()

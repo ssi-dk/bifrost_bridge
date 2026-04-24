@@ -31,9 +31,9 @@ def process_pmlst_data_from_cli() -> None:
         "Process pMLST TSV output into a normalized TSV.",
         [
             {"names": ["input_path"], "kwargs": {"help": "Path to the input pMLST TSV file."}},
-            {"names": ["--output-path"], "kwargs": {"default": "./output.tsv"}},
-            {"names": ["--filter-columns"], "kwargs": {"default": None}},
-            {"names": ["--replace-header"], "kwargs": {"default": None}},
+            {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
+            {"names": ["--filter_columns"], "kwargs": {"default": None}},
+            {"names": ["--replace_header"], "kwargs": {"default": None}},
         ],
     )
     args = parser.parse_args()

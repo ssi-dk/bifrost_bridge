@@ -38,9 +38,9 @@ def process_amrfinderplus_data_from_cli() -> None:
                 "names": ["input_path"],
                 "kwargs": {"help": "Path to the input AMRFinderPlus TSV file."},
             },
-            {"names": ["--output-path"], "kwargs": {"default": "./output.tsv"}},
-            {"names": ["--replace-header"], "kwargs": {"default": None}},
-            {"names": ["--filter-columns"], "kwargs": {"default": None}},
+            {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
+            {"names": ["--replace_header"], "kwargs": {"default": None}},
+            {"names": ["--filter_columns"], "kwargs": {"default": None}},
         ],
     )
     args = parser.parse_args()

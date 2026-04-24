@@ -31,9 +31,9 @@ def process_shovill_data_from_cli() -> None:
         "Process Shovill log output into a normalized TSV.",
         [
             {"names": ["input_path"], "kwargs": {"help": "Path to the input Shovill log file."}},
-            {"names": ["--output-path"], "kwargs": {"default": "./output.tsv"}},
+            {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {
-                "names": ["--no-average-coverage"],
+                "names": ["--no_average_coverage"],
                 "kwargs": {"action": "store_false", "dest": "average_coverage"},
             },
         ],
