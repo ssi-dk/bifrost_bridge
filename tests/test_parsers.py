@@ -180,4 +180,4 @@ def test_python_module_help() -> None:
         check=False,
     )
     assert result.returncode == 0
-    assert "--mlst-path" in result.stdout
+    assert "--mlst_path" in result.stdout

@@ -70,13 +70,13 @@ def process_bracken_data_from_cli() -> None:
         "Process Bracken output into a normalized TSV.",
         [
             {"names": ["input_path"], "kwargs": {"help": "Path to the input Bracken report file."}},
-            {"names": ["--output-path"], "kwargs": {"default": "./output.tsv"}},
+            {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {
-                "names": ["--add-header"],
+                "names": ["--add_header"],
                 "kwargs": {"default": "%ofreads, reads, notsure, rank, taxid, name"},
             },
-            {"names": ["--replace-header"], "kwargs": {"default": None}},
-            {"names": ["--filter-columns"], "kwargs": {"default": None}},
+            {"names": ["--replace_header"], "kwargs": {"default": None}},
+            {"names": ["--filter_columns"], "kwargs": {"default": None}},
         ],
     )
     args = parser.parse_args()

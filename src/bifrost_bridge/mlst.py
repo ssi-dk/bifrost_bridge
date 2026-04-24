@@ -63,12 +63,12 @@ def process_mlst_data_from_cli() -> None:
         "Process MLST TSV output into a normalized TSV.",
         [
             {"names": ["input_path"], "kwargs": {"help": "Path to the input MLST TSV file."}},
-            {"names": ["--output-path"], "kwargs": {"default": "./output.tsv"}},
-            {"names": ["--add-header"], "kwargs": {"default": None}},
-            {"names": ["--replace-header"], "kwargs": {"default": None}},
-            {"names": ["--filter-columns"], "kwargs": {"default": None}},
-            {"names": ["--remove-sampleid"], "kwargs": {"action": "store_true"}},
-            {"names": ["--combine-alleles"], "kwargs": {"action": "store_true"}},
+            {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
+            {"names": ["--add_header"], "kwargs": {"default": None}},
+            {"names": ["--replace_header"], "kwargs": {"default": None}},
+            {"names": ["--filter_columns"], "kwargs": {"default": None}},
+            {"names": ["--remove_sampleid"], "kwargs": {"action": "store_true"}},
+            {"names": ["--combine_alleles"], "kwargs": {"action": "store_true"}},
         ],
     )
     args = parser.parse_args()
