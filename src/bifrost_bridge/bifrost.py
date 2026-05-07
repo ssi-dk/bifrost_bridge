@@ -80,13 +80,13 @@ def process_qc_data(
             input_path=plasmidfinder_path,
             output_path="parsed_plasmidfinder.tsv",
             filter_columns="Database,Plasmid,Identity,Query / Template length,Contig",
-            replace_header="PFInder_Database,PFinder_Plasmid,PFinder_Identity,PFinder_Coverage,PFinder_Contig",
+            replace_header="PFinder_Database,PFinder_Plasmid,PFinder_Identity,PFinder_Coverage,PFinder_Contig",
             convert_coverage=True,
             filter_contig=True,
         )
         _write_header_if_empty(
             "parsed_plasmidfinder.tsv",
-            "PFInder_Database\tPFinder_Plasmid\tPFinder_Identity\tPFinder_Coverage\tPFinder_Contig",
+            "PFinder_Database\tPFinder_Plasmid\tPFinder_Identity\tPFinder_Coverage\tPFinder_Contig",
         )
 
     if bracken_path is not None:
