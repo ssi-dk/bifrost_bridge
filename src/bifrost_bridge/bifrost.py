@@ -64,13 +64,13 @@ def process_qc_data(
         process_quast_data(
             input_path=quast_path,
             output_path="parsed_quast.tsv",
-            filter_columns="# contigs, Largest contig, Total length, GC (%), N50, N90, L50, L90",
-            replace_header="Quast_Contigs,Quast_Largest_Contig,Quast_Total_Length,Quast_GC_Pct,Quast_N50,Quast_N90,Quast_L50,Quast_L90",
+            filter_columns="# contigs, Largest contig, Total length, GC (%), # N's per 100 kbp, N50, N90, L50, L90",
+            replace_header="Quast_Contigs,Quast_Largest_Contig,Quast_Total_Length,Quast_GC_Pct,Ns_Per_100kbp,Quast_N50,Quast_N90,Quast_L50,Quast_L90",
             transpose=True,
         )
         _write_header_if_empty(
             "parsed_quast.tsv",
-            "Quast_Contigs\tQuast_Largest_Contig\tQuast_Total_Length\tQuast_GC_Pct\tQuast_N50\tQuast_N90\tQuast_L50\tQuast_L90",
+            "Quast_Contigs\tQuast_Largest_Contig\tQuast_Total_Length\tQuast_GC_Pct\tNs_Per_100kbp\tQuast_N50\tQuast_N90\tQuast_L50\tQuast_L90",
         )
 
     if plasmidfinder_path is not None:
