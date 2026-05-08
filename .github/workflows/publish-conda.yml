@@ -20,7 +20,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.11"
-          channels: conda-forge,defaults
+          channels: ssi-dk,conda-forge,defaults
           channel-priority: strict
 
       - name: Install conda-build
@@ -38,7 +38,7 @@ jobs:
       - name: Build conda package
         shell: bash -el {0}
         run: |
-          conda build conda --output-folder ./conda-bld
+          conda build conda --channel ssi-dk --channel conda-forge --channel defaults --output-folder ./conda-bld
 
       - name: Upload to Anaconda
         shell: bash -el {0}
