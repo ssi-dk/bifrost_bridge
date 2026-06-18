@@ -1,0 +1,15 @@
+<macros>
+    <xml name="requirements">
+        <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bifrost_bridge</requirement>
+            <yield/>
+        </requirements>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <yield />
+        </citations>
+    </xml>
+    <token name="@TOOL_VERSION@">0.9.1</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+</macros>

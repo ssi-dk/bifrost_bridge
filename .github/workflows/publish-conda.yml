@@ -1,18 +1,27 @@
 name: Publish to Anaconda
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_run:
+    workflows: ["Publish to PyPI"]
+    types: [completed]
+
+permissions:
+  contents: read
 
 jobs:
   build-and-publish:
     name: Build and Publish to Anaconda
     runs-on: ubuntu-latest
+    if: >-
+      ${{
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push'
+      }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
 
       - name: Set up Miniconda
@@ -20,25 +29,49 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.11"
-          channels: ssi-dk,conda-forge,defaults
+          channels: ssi-dk,bioconda,conda-forge
           channel-priority: strict
 
-      - name: Install conda-build
+      - name: Install conda packaging tools
         shell: bash -el {0}
         run: |
-          conda install -y conda-build anaconda-client
+          conda install -y conda-build conda-libmamba-solver anaconda-client
 
-      - name: Verify version
+      - name: Read version
         id: version
+        shell: bash
         run: |
           VERSION=$(grep -oP "__version__\s*=\s*['\"]\\K[^'\"]+(?=['\"])" src/bifrost_bridge/__init__.py)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Building version: $VERSION"
+
+      - name: Wait for PyPI release
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          for attempt in {1..60}; do
+            if python -c 'import json, os, sys, urllib.request; url = f"https://pypi.org/pypi/bifrost_bridge/{os.environ[\"VERSION\"]}/json"; data = json.load(urllib.request.urlopen(url, timeout=15)); sys.exit(0 if any(item.get("packagetype") == "sdist" for item in data.get("urls", [])) else 1)' 2>/dev/null; then
+              echo "PyPI release bifrost_bridge==$VERSION is available"
+              exit 0
+            fi
+            echo "Waiting for PyPI release bifrost_bridge==$VERSION ($attempt/60)"
+            sleep 10
+          done
+          echo "ERROR: PyPI release bifrost_bridge==$VERSION was not available after 10 minutes"
+          exit 1
 
       - name: Build conda package
         shell: bash -el {0}
+        env:
+          CONDA_SOLVER: libmamba
         run: |
-          conda build conda --channel ssi-dk --channel conda-forge --channel defaults --output-folder ./conda-bld
+          conda build conda \
+            --channel ssi-dk \
+            --channel bioconda \
+            --channel conda-forge \
+            --no-anaconda-upload \
+            --output-folder ./conda-bld
 
       - name: Upload to Anaconda
         shell: bash -el {0}

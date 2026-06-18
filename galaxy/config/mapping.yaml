@@ -1,0 +1,361 @@
+# Mapping for processed API output used by the uQCme dashboard.
+
+QC_overrides:
+  software: ["quast", "fastp"]
+  assembly_type: "short"
+
+Sections:
+  Basic:
+    Name:
+      data:
+        mapping: sample_name
+      report:
+        id: true # represents the unique identifier for the sample which can be passed to other systems
+
+  QC_metrics:
+    QC action: # generated from qc
+      data:
+        mapping: qc_action
+      report:
+        filter: true
+        priority_coloring: true
+    QC outcome: # generated from qc
+      data:
+        mapping: qc_outcome
+      report:
+        filter: true
+        priority_coloring: true
+    Failed Rules:
+      data:
+        mapping: failed_rules
+    Passed Rules:
+      data:
+        mapping: passed_rules
+    Expected species:
+      data:
+        mapping: rMLST_match
+      QC:
+        mapping: ["speciesName", "genusName", "Marker lineage"]
+      report:
+        filter: true
+    Provided Species:
+      data:
+        mapping: species
+    Species:
+      QC:
+        mapping: ["speciesName", "genusName", "Marker lineage"]
+      report:
+        filter: true
+    Genome size (bp):
+      data:
+        mapping: Quast_Total_Length
+      QC:
+        software: "checkm"
+        assembly_type: "short"
+        mapping: ["Genome size (bp)", "Total length (>= 0 bp)"]
+      report:
+        filter: true
+    Ns:
+      data:
+        mapping: Ns_Per_100kbp
+      QC:
+        software: "quast"
+        mapping: ["Ns per 100 kbp", "Ns_Per_100kbp"]
+    GC:
+      data:
+        mapping: Quast_GC_Pct
+      QC:
+        mapping: ["GC", "GC (%)"]
+      report:
+        filter: true
+        description: GC content
+    Coverage:
+      data:
+        mapping: Average_Coverage
+      QC:
+        mapping: Coverage
+    N50:
+      data:
+        mapping: Quast_N50
+      QC:
+        mapping: ["N50", "N50 (scaffolds)"]
+    Contigs:
+      data:
+        mapping: Quast_Contigs
+      QC:
+        mapping: ["# contigs", "# contigs (>= 0 bp)"]
+    Completeness:
+      data:
+        mapping: Bracken_Species1_Pct
+      QC:
+        mapping: ["Completeness"]
+      hidden: true
+    Contamination:
+      data:
+        mapping: Bracken_Species2_Pct
+      QC:
+        mapping: ["Contamination"]
+      hidden: true
+    Depth:
+      data:
+        mapping: bin_coverage_at_1x
+      QC:
+        mapping: ["Depth"]
+
+  Experimental:
+    Depth 10x:
+      data:
+        mapping: bin_coverage_at_10x
+    Depth 25x:
+      data:
+        mapping: bin_coverage_at_25x
+
+  QC:
+    fastp Total Reads Before Filtering:
+      data:
+        mapping: fastp_Before_Filtering_Total_Reads
+      report:
+        description: Total reads before filtering.
+    fastp Read1 Mean Length Before Filtering:
+      data:
+        mapping: fastp_Before_Filtering_Read1_Mean_Length
+    fastp Read2 Mean Length Before Filtering:
+      data:
+        mapping: fastp_Before_Filtering_Read2_Mean_Length
+    fastp Total Reads After Filtering:
+      data:
+        mapping: fastp_After_Filtering_Total_Reads
+      report:
+        description: Total reads after filtering.
+    fastp Read1 Mean Length After Filtering:
+      data:
+        mapping: fastp_After_Filtering_Read1_Mean_Length
+    fastp Read2 Mean Length After Filtering:
+      data:
+        mapping: fastp_After_Filtering_Read2_Mean_Length
+    fastp Low Quality Reads:
+      data:
+        mapping: fastp_Low_Quality_Reads
+      report:
+        description: Reads removed due to low quality.
+    fastp Too Many N Reads:
+      data:
+        mapping: fastp_Too_Many_N_Reads
+      report:
+        description: Reads removed due to excessive Ns.
+    fastp Too Short Reads:
+      data:
+        mapping: fastp_Too_Short_Reads
+      report:
+        description: Reads removed for being too short.
+    fastp Too Long Reads:
+      data:
+        mapping: fastp_Too_Long_Reads
+      report:
+        description: Reads removed for being too long.
+    fastp Duplication Rate:
+      data:
+        mapping: fastp_Duplication_Rate
+      report:
+        description: Estimated proportion of duplicated reads.
+    fastp Adapter Trimmed Reads:
+      data:
+        mapping: fastp_Adapter_Trimmed_Reads
+    fastp Adapter Trimmed Bases:
+      data:
+        mapping: fastp_Adapter_Trimmed_Bases
+    fastp Read1 Total Cycles Before Filtering:
+      data:
+        mapping: fastp_Read1_Before_Filtering_Total_Cycles
+    fastp Read1 Total Cycles After Filtering:
+      data:
+        mapping: fastp_Read1_After_Filtering_Total_Cycles
+    fastp Read2 Total Cycles Before Filtering:
+      data:
+        mapping: fastp_Read2_Before_Filtering_Total_Cycles
+    fastp Read2 Total Cycles After Filtering:
+      data:
+        mapping: fastp_Read2_After_Filtering_Total_Cycles
+
+  Quast:
+    Contigs:
+      data:
+        mapping: Quast_Contigs
+      report:
+        filter: true
+        description: Number of contigs in the assembly.
+    Total Length:
+      data:
+        mapping: Quast_Total_Length
+      report:
+        filter: true
+        description: Total assembly length.
+    GC Percent:
+      data:
+        mapping: Quast_GC_Pct
+      report:
+        filter: true
+        description: GC percentage of assembly.
+    Largest Contig:
+      data:
+        mapping: Quast_Largest_Contig
+    N50:
+      data:
+        mapping: Quast_N50
+      report:
+        filter: true
+        description: Contig length covering 50% of genome.
+    N90:
+      data:
+        mapping: Quast_N90
+    L50:
+      data:
+        mapping: Quast_L50
+      report:
+        description: Number of contigs contributing to N50.
+    L90:
+      data:
+        mapping: Quast_L90
+
+  Bracken:
+    Species Summary:
+      data:
+        mapping: Bracken_Species
+      report:
+        filter: true
+        description: Dominant species classification.
+    Species Summary Percent:
+      data:
+        mapping: Bracken_Species_Pct
+      report:
+        description: Percentage of reads assigned to dominant species.
+    Top Species:
+      data:
+        mapping: Bracken_Species1
+      report:
+        filter: true
+        description: Most abundant species.
+    Top Species Percent:
+      data:
+        mapping: Bracken_Species1_Pct
+    Second Species:
+      data:
+        mapping: Bracken_Species2
+      report:
+        filter: true
+        description: Second most abundant species.
+    Second Species Percent:
+      data:
+        mapping: Bracken_Species2_Pct
+    Unclassified Label:
+      data:
+        mapping: Bracken_Unclassified
+    Unclassified Percent:
+      data:
+        mapping: Bracken_Unclassified_Pct
+      report:
+        description: Percentage of unclassified reads.
+
+  MLST:
+    MLST Species:
+      data:
+        mapping: MLST_Species
+      report:
+        filter: true
+    MLST Alleles:
+      data:
+        mapping: MLST_Alleles
+
+  AMR:
+    AMR Contig ID:
+      data:
+        mapping: AMR_ContigID
+    AMR Coverage:
+      data:
+        mapping: AMR_Coverage
+      report:
+        description: Coverage of AMR gene.
+    AMR Database Version and Tool Version:
+      data:
+        mapping: AMR_dbv_toolv
+    AMR Element Name:
+      data:
+        mapping: AMR_ElementName
+      report:
+        description: Name of detected AMR gene.
+    AMR Element Symbol:
+      data:
+        mapping: AMR_ElementSymbol
+    AMR Identity:
+      data:
+        mapping: AMR_Identity
+      report:
+        description: Percent identity to reference gene.
+    AMR Start:
+      data:
+        mapping: AMR_Start
+    AMR Stop:
+      data:
+        mapping: AMR_Stop
+    AMR Strand:
+      data:
+        mapping: AMR_Strand
+    AMR Subclass:
+      data:
+        mapping: AMR_Subclass
+
+  PFinder:
+    PFinder Database:
+      data:
+        mapping: PFinder_Database
+    PFinder Plasmid:
+      data:
+        mapping: PFinder_Plasmid
+    PFinder Identity:
+      data:
+        mapping: PFinder_Identity
+    PFinder Coverage:
+      data:
+        mapping: PFinder_Coverage
+    PFinder Contig:
+      data:
+        mapping: PFinder_Contig
+
+  pMLST:
+    pMLST Plasmids:
+      data:
+        mapping: pMLST_plasmids
+    pMLST IncF:
+      data:
+        mapping: pMLST_IncF
+    pMLST IncI1:
+      data:
+        mapping: pMLST_IncI1
+    pMLST IncA/C:
+      data:
+        mapping: pMLST_IncA/C
+    pMLST IncHI1:
+      data:
+        mapping: pMLST_IncHI1
+    pMLST IncHI2:
+      data:
+        mapping: pMLST_IncHI2
+    pMLST IncN:
+      data:
+        mapping: pMLST_IncN
+    pMLST Summary:
+      data:
+        mapping: pMLST_summary
+
+  Other:
+    Kraken/Bracken Report Path:
+      data:
+        mapping: bracken_kraken_report_path
+      report:
+        description: Path to Kraken/Bracken report.
+    Shovil Contigs Path:
+      data:
+        mapping: shovil_contigs_path
+      report:
+        description: Path to assembled contigs.
+    unmapped: true

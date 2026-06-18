@@ -1,0 +1,34 @@
+name: bifrost-bridge-dev
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python =3.11
+  - pip
+
+  # Runtime dependencies
+  - pandas >=3.0.3,<4
+  - pyyaml >=6.0.3,<7
+
+  # Build and packaging
+  - hatchling
+  - python-build
+  - twine
+
+  # Testing and linting
+  - pytest >=9.1.0,<10
+  - pytest-cov >=7.1.0,<8
+
+  # Conda packaging
+  - conda-build
+  - conda-index
+  - conda-libmamba-solver
+  - anaconda-client
+
+  # Galaxy wrapper development/testing
+  - planemo
+
+  # conda-forge does not yet provide ruff 0.15.x on all platforms.
+  - pip:
+      - ruff>=0.15.18,<0.16
