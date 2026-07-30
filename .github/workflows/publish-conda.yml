@@ -61,7 +61,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           for attempt in {1..60}; do
-            if python -c 'import json, os, sys, urllib.request; url = f"https://pypi.org/pypi/bifrost_bridge/{os.environ[\"VERSION\"]}/json"; data = json.load(urllib.request.urlopen(url, timeout=15)); sys.exit(0 if any(item.get("packagetype") == "sdist" for item in data.get("urls", [])) else 1)' 2>/dev/null; then
+            if python -c 'import json, os, sys, urllib.request; url = "https://pypi.org/pypi/bifrost_bridge/{}/json".format(os.environ["VERSION"]); data = json.load(urllib.request.urlopen(url, timeout=15)); sys.exit(0 if any(item.get("packagetype") == "sdist" for item in data.get("urls", [])) else 1)' 2>/dev/null; then
               echo "PyPI release bifrost_bridge==$VERSION is available"
               exit 0
             fi
@@ -76,7 +76,7 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          SHA256=$(python -c 'import json, os, urllib.request; data = json.load(urllib.request.urlopen(f"https://pypi.org/pypi/bifrost_bridge/{os.environ[\"VERSION\"]}/json", timeout=15)); print(next(item["digests"]["sha256"] for item in data["urls"] if item.get("packagetype") == "sdist"))')
+          SHA256=$(python -c 'import json, os, urllib.request; url = "https://pypi.org/pypi/bifrost_bridge/{}/json".format(os.environ["VERSION"]); data = json.load(urllib.request.urlopen(url, timeout=15)); print(next(item["digests"]["sha256"] for item in data["urls"] if item.get("packagetype") == "sdist"))')
           if [[ ! "$SHA256" =~ ^[0-9a-f]{64}$ ]]; then
             echo "ERROR: Invalid PyPI sdist SHA256: $SHA256"
             exit 1
