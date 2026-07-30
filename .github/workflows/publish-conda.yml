@@ -89,7 +89,7 @@ jobs:
         env:
           CONDA_SOLVER: libmamba
         run: |
-          conda build conda \
+          conda-build conda \
             --channel conda-forge \
             --channel bioconda \
             --channel ssi-dk \
