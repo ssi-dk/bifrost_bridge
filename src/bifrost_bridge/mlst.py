@@ -62,7 +62,10 @@ def process_mlst_data_from_cli() -> None:
     parser = build_parser(
         "Process MLST TSV output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input MLST TSV file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input MLST TSV file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {"names": ["--add_header"], "kwargs": {"default": None}},
             {"names": ["--replace_header"], "kwargs": {"default": None}},

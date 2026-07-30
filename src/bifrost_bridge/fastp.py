@@ -27,7 +27,10 @@ def process_fastp_data_from_cli() -> None:
     parser = build_parser(
         "Process FASTP JSON output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input FASTP JSON file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input FASTP JSON file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {"names": ["--replace_header"], "kwargs": {"default": None}},
             {"names": ["--filter_columns"], "kwargs": {"default": None}},

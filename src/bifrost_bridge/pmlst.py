@@ -30,7 +30,10 @@ def process_pmlst_data_from_cli() -> None:
     parser = build_parser(
         "Process pMLST TSV output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input pMLST TSV file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input pMLST TSV file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {"names": ["--filter_columns"], "kwargs": {"default": None}},
             {"names": ["--replace_header"], "kwargs": {"default": None}},

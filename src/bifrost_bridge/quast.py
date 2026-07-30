@@ -49,12 +49,18 @@ def process_quast_data_from_cli() -> None:
     parser = build_parser(
         "Process QUAST TSV output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input QUAST TSV file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input QUAST TSV file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {"names": ["--add_header"], "kwargs": {"default": ""}},
             {"names": ["--replace_header"], "kwargs": {"default": None}},
             {"names": ["--filter_columns"], "kwargs": {"default": None}},
-            {"names": ["--no_transpose"], "kwargs": {"action": "store_false", "dest": "transpose"}},
+            {
+                "names": ["--no_transpose"],
+                "kwargs": {"action": "store_false", "dest": "transpose"},
+            },
         ],
     )
     args = parser.parse_args()

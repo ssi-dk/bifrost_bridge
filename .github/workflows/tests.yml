@@ -19,10 +19,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/ruff-action@v4.0.0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          version: "0.15.x"
-          args: "format --check"
+          python-version: "3.11"
+
+      - name: Check formatting with Black
+        run: |
+          python -m pip install "black>=26.5.1,<27"
+          black --check .
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Check types with mypy
+        run: |
+          python -m pip install -e ".[dev]"
+          mypy src tests
 
   test:
     name: Test Python ${{ matrix.python-version }}

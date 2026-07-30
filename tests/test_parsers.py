@@ -17,7 +17,6 @@ from bifrost_bridge.rmlst import process_rmlst_data
 from bifrost_bridge.shovill import process_shovill_data
 from bifrost_bridge.ssiamb import process_ssiamb_data
 
-
 TEST_DATA = Path(__file__).resolve().parent.parent / "test_data"
 
 

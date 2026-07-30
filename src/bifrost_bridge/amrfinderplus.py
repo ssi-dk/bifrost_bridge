@@ -23,7 +23,7 @@ def process_amrfinderplus_data(
         df.df.columns = df.df.iloc[0]
         df.df = df.df.iloc[1:]
     version_column = None
-    version_values = None
+    version_values: list[str] = []
     if filter_columns:
         aliases = {
             "Gene symbol": "Element symbol",
@@ -42,9 +42,7 @@ def process_amrfinderplus_data(
             else:
                 df.df["AMR_dbv_toolv"] = ""
         resolved_columns = [
-            aliases.get(column, column)
-            if column not in df.df.columns
-            else column
+            aliases.get(column, column) if column not in df.df.columns else column
             for column in requested_columns
         ]
         df.filter_columns(",".join(resolved_columns))
@@ -54,7 +52,7 @@ def process_amrfinderplus_data(
         df.rename_header(replace_header)
     if version_column is not None:
         version_column = df.df.columns[version_column]
-        version_values = df.df[version_column].dropna().astype(str).drop_duplicates()
+        version_values = df.df[version_column].dropna().astype(str).drop_duplicates().tolist()
     df = df.collapse_rows()
     if version_column is not None and not df.df.empty:
         df.df = df.df.copy()

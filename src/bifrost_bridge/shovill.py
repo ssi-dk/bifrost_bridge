@@ -30,7 +30,10 @@ def process_shovill_data_from_cli() -> None:
     parser = build_parser(
         "Process Shovill log output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input Shovill log file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input Shovill log file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {
                 "names": ["--no_average_coverage"],

@@ -32,3 +32,7 @@ dependencies:
   # conda-forge does not yet provide ruff 0.15.x on all platforms.
   - pip:
       - ruff>=0.15.18,<0.16
+      - black>=26.5.1,<27
+      - mypy>=2.3,<3
+      - pandas-stubs>=2.3.3,<4
+      - types-PyYAML>=6.0.12

@@ -62,7 +62,10 @@ def process_rmlst_data_from_cli() -> None:
     parser = build_parser(
         "Process rMLST JSON or parsed TSV output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input rMLST file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input rMLST file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {"names": ["--parsed"], "kwargs": {"action": "store_true"}},
             {"names": ["--replace_header"], "kwargs": {"default": None}},

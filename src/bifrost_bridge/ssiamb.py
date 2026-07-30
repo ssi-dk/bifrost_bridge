@@ -22,11 +22,13 @@ def process_ssiamb_data(
     if filter_columns:
         requested_columns = [column.strip() for column in filter_columns.split(",")]
         resolved_columns = [
-            "ambiguous_sites"
-            if column == "ambiguous_snv_count"
-            and column not in df.df.columns
-            and "ambiguous_sites" in df.df.columns
-            else column
+            (
+                "ambiguous_sites"
+                if column == "ambiguous_snv_count"
+                and column not in df.df.columns
+                and "ambiguous_sites" in df.df.columns
+                else column
+            )
             for column in requested_columns
         ]
         df.filter_columns(",".join(resolved_columns))
@@ -39,7 +41,10 @@ def process_ssiamb_data_from_cli() -> None:
     parser = build_parser(
         "Process SSI ambiguous-SNV TSV output into a normalized TSV.",
         [
-            {"names": ["input_path"], "kwargs": {"help": "Path to the input SSIAMB TSV file."}},
+            {
+                "names": ["input_path"],
+                "kwargs": {"help": "Path to the input SSIAMB TSV file."},
+            },
             {"names": ["--output_path"], "kwargs": {"default": "./output.tsv"}},
             {"names": ["--filter_columns"], "kwargs": {"default": None}},
             {"names": ["--replace_header"], "kwargs": {"default": None}},

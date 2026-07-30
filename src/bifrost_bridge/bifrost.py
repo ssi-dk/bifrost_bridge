@@ -134,7 +134,9 @@ def process_qc_data(
         if not Path(shovill_path).exists():
             raise FileNotFoundError(f"File not found: {shovill_path}")
         process_shovill_data(
-            input_path=shovill_path, output_path="parsed_shovill.tsv", average_coverage=True
+            input_path=shovill_path,
+            output_path="parsed_shovill.tsv",
+            average_coverage=True,
         )
 
     if ssiamb_path is not None:
