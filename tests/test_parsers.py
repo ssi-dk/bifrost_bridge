@@ -105,6 +105,35 @@ def test_amrfinderplus_filters_columns(tmp_path: Path) -> None:
     assert row["subclass"].split("|")[:5] == ["QUINOLONE"] * 4 + [""]
 
 
+def test_amrfinderplus_accepts_current_column_names(tmp_path: Path) -> None:
+    input_path = tmp_path / "amrfinderplus.tsv"
+    output_path = tmp_path / "parsed.tsv"
+    input_path.write_text(
+        "Contig id\tElement symbol\tElement name\tSubclass\t"
+        "% Coverage of reference\t% Identity to reference\t"
+        "Database version\tTool version\n"
+        "contig1\tblaCDD\tCDD beta-lactamase\tBETA-LACTAM\t100.00\t95.27\t"
+        "2026-05-15.1\t4.2.7\n"
+        "contig2\tblaAHM\tAHM beta-lactamase\tCARBAPENEM\t100.00\t96.10\t"
+        "2026-05-15.1\t4.2.7\n",
+        encoding="utf-8",
+    )
+    process_amrfinderplus_data(
+        str(input_path),
+        str(output_path),
+        filter_columns=(
+            "Contig id,Gene symbol,Sequence name,Subclass,"
+            "% Coverage of reference sequence,% Identity to reference sequence,"
+            "AMR_dbv_toolv"
+        ),
+        replace_header="contig,gene,name,subclass,coverage,identity,AMR_dbv_toolv",
+    )
+    df = read_tsv(output_path)
+    assert df.iloc[0]["gene"] == "blaCDD|blaAHM"
+    assert df.iloc[0]["coverage"] == "100.0|100.0"
+    assert df.iloc[0]["AMR_dbv_toolv"] == "2026-05-15.1,4.2.7"
+
+
 def test_bracken_summarizes_top_species(tmp_path: Path) -> None:
     output_path = tmp_path / "bracken.tsv"
     process_bracken_data(str(TEST_DATA / "bracken_krakenreport.txt"), str(output_path))
@@ -151,6 +180,23 @@ def test_ssiamb_filters_count(tmp_path: Path) -> None:
     assert int(df.iloc[0]["ssiamb_count"]) == 5388
 
 
+def test_ssiamb_accepts_current_ambiguous_sites_column(tmp_path: Path) -> None:
+    input_path = tmp_path / "ssiamb.tsv"
+    output_path = tmp_path / "parsed.tsv"
+    input_path.write_text(
+        "sample\tambiguous_sites\nsample1\t4417\n",
+        encoding="utf-8",
+    )
+    process_ssiamb_data(
+        str(input_path),
+        str(output_path),
+        filter_columns="ambiguous_snv_count",
+        replace_header="ssiamb_count",
+    )
+    df = read_tsv(output_path)
+    assert int(df.iloc[0]["ssiamb_count"]) == 4417
+
+
 def test_qc_combines_selected_outputs(tmp_path: Path) -> None:
     cwd = Path.cwd()
     os.chdir(tmp_path)
@@ -169,6 +215,45 @@ def test_qc_combines_selected_outputs(tmp_path: Path) -> None:
         os.chdir(cwd)
 
 
+def test_qc_reads_versions_from_amrfinder_output(tmp_path: Path) -> None:
+    input_path = tmp_path / "amrfinderplus.tsv"
+    input_path.write_text(
+        "Contig id\tStart\tStop\tStrand\tElement symbol\tElement name\tSubclass\t"
+        "% Coverage of reference\t% Identity to reference\tDatabase version\tTool version\n"
+        "contig1\t1\t100\t+\tblaCDD\tCDD beta-lactamase\tBETA-LACTAM\t"
+        "100.00\t95.27\t2026-05-15.1\t4.2.7\n",
+        encoding="utf-8",
+    )
+    cwd = Path.cwd()
+    os.chdir(tmp_path)
+    try:
+        process_qc_data(amrfinder_path=str(input_path), output_path="combined.tsv")
+        df = read_tsv(tmp_path / "combined.tsv")
+        assert df.iloc[0]["AMR_dbv_toolv"] == "2026-05-15.1,4.2.7"
+    finally:
+        os.chdir(cwd)
+
+
+def test_qc_combines_parsed_rmlst_output(tmp_path: Path) -> None:
+    input_path = tmp_path / "rmlst.tabular"
+    input_path.write_text(
+        "rMLST_match\trMLST_support\nClostridioides difficile\t100\n",
+        encoding="utf-8",
+    )
+    cwd = Path.cwd()
+    os.chdir(tmp_path)
+    try:
+        process_qc_data(
+            rmlst_path=str(input_path),
+            output_path="combined.tsv",
+        )
+        df = read_tsv(tmp_path / "combined.tsv")
+        assert df.iloc[0]["rMLST_match"] == "Clostridioides difficile"
+        assert int(df.iloc[0]["rMLST_support"]) == 100
+    finally:
+        os.chdir(cwd)
+
+
 def test_python_module_help() -> None:
     env = os.environ.copy()
     env["PYTHONPATH"] = str(Path(__file__).resolve().parent.parent / "src")
@@ -181,3 +266,4 @@ def test_python_module_help() -> None:
     )
     assert result.returncode == 0
     assert "--mlst_path" in result.stdout
+    assert "--amrfinder_version_path" not in result.stdout

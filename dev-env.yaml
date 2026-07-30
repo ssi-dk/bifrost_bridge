@@ -8,7 +8,7 @@ dependencies:
   - pip
 
   # Runtime dependencies
-  - pandas >=3.0.3,<4
+  - pandas >=2.3.3,<4
   - pyyaml >=6.0.3,<7
 
   # Build and packaging

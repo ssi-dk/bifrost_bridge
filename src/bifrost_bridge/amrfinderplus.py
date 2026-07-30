@@ -22,11 +22,43 @@ def process_amrfinderplus_data(
     if df.df.shape[0] == 1 and list(df.df.columns) == list(range(df.df.shape[1])):
         df.df.columns = df.df.iloc[0]
         df.df = df.df.iloc[1:]
+    version_column = None
+    version_values = None
     if filter_columns:
-        df.filter_columns(filter_columns)
+        aliases = {
+            "Gene symbol": "Element symbol",
+            "Sequence name": "Element name",
+            "% Coverage of reference sequence": "% Coverage of reference",
+            "% Identity to reference sequence": "% Identity to reference",
+        }
+        requested_columns = [column.strip() for column in filter_columns.split(",")]
+        if "AMR_dbv_toolv" in requested_columns:
+            if {"Database version", "Tool version"}.issubset(df.df.columns):
+                df.df["AMR_dbv_toolv"] = (
+                    df.df["Database version"].fillna("").astype(str)
+                    + ","
+                    + df.df["Tool version"].fillna("").astype(str)
+                )
+            else:
+                df.df["AMR_dbv_toolv"] = ""
+        resolved_columns = [
+            aliases.get(column, column)
+            if column not in df.df.columns
+            else column
+            for column in requested_columns
+        ]
+        df.filter_columns(",".join(resolved_columns))
+        if "AMR_dbv_toolv" in resolved_columns:
+            version_column = resolved_columns.index("AMR_dbv_toolv")
     if replace_header:
         df.rename_header(replace_header)
+    if version_column is not None:
+        version_column = df.df.columns[version_column]
+        version_values = df.df[version_column].dropna().astype(str).drop_duplicates()
     df = df.collapse_rows()
+    if version_column is not None and not df.df.empty:
+        df.df = df.df.copy()
+        df.df[version_column] = ["|".join(version_values)]
     df.export_data(output_path, file_type="tsv")
 
 

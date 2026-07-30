@@ -20,7 +20,16 @@ def process_ssiamb_data(
         Path(output_path).write_text("", encoding="utf-8")
         return
     if filter_columns:
-        df.filter_columns(filter_columns)
+        requested_columns = [column.strip() for column in filter_columns.split(",")]
+        resolved_columns = [
+            "ambiguous_sites"
+            if column == "ambiguous_snv_count"
+            and column not in df.df.columns
+            and "ambiguous_sites" in df.df.columns
+            else column
+            for column in requested_columns
+        ]
+        df.filter_columns(",".join(resolved_columns))
     if replace_header:
         df.rename_header(replace_header)
     df.export_data(output_path, file_type="tsv")

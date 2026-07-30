@@ -167,6 +167,7 @@ checklink/cookies.txt
 
 # Generated parser outputs
 parsed_*.tsv
+/galaxy_outputs/
 
 # Conda build output
 conda-bld/

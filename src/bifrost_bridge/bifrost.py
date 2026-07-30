@@ -28,7 +28,6 @@ def process_qc_data(
     plasmidfinder_path: str | None = None,
     bracken_path: str | None = None,
     amrfinder_path: str | None = None,
-    amrfinder_version_path: str | None = None,
     pmlst_path: str | None = None,
     rmlst_path: str | None = None,
     shovill_path: str | None = None,
@@ -104,12 +103,12 @@ def process_qc_data(
         process_amrfinderplus_data(
             input_path=amrfinder_path,
             output_path="parsed_amrfinder.tsv",
-            filter_columns="Contig id,Start,Stop,Strand,Gene symbol,Sequence name,Subclass,% Coverage of reference sequence,% Identity to reference sequence",
-            replace_header="AMR_ContigID,AMR_Start,AMR_Stop,AMR_Strand,AMR_ElementSymbol,AMR_ElementName,AMR_Subclass,AMR_Coverage,AMR_Identity",
+            filter_columns="Contig id,Start,Stop,Strand,Gene symbol,Sequence name,Subclass,% Coverage of reference sequence,% Identity to reference sequence,AMR_dbv_toolv",
+            replace_header="AMR_ContigID,AMR_Start,AMR_Stop,AMR_Strand,AMR_ElementSymbol,AMR_ElementName,AMR_Subclass,AMR_Coverage,AMR_Identity,AMR_dbv_toolv",
         )
         _write_header_if_empty(
             "parsed_amrfinder.tsv",
-            "AMR_ContigID\tAMR_Start\tAMR_Stop\tAMR_Strand\tAMR_ElementSymbol\tAMR_ElementName\tAMR_Subclass\tAMR_Coverage\tAMR_Identity",
+            "AMR_ContigID\tAMR_Start\tAMR_Stop\tAMR_Strand\tAMR_ElementSymbol\tAMR_ElementName\tAMR_Subclass\tAMR_Coverage\tAMR_Identity\tAMR_dbv_toolv",
         )
 
     if pmlst_path is not None:
@@ -161,8 +160,6 @@ def process_qc_data(
             output_files.append("parsed_plasmidfinder.tsv")
         if amrfinder_path is not None:
             output_files.append("parsed_amrfinder.tsv")
-        if amrfinder_version_path is not None:
-            output_files.append(amrfinder_version_path)
         if bracken_path is not None:
             output_files.append("parsed_bracken.tsv")
         if pmlst_path is not None:
@@ -188,7 +185,6 @@ def process_qc_data_from_cli() -> None:
             {"names": ["--plasmidfinder_path"], "kwargs": {"default": None}},
             {"names": ["--bracken_path"], "kwargs": {"default": None}},
             {"names": ["--amrfinder_path"], "kwargs": {"default": None}},
-            {"names": ["--amrfinder_version_path"], "kwargs": {"default": None}},
             {"names": ["--pmlst_path"], "kwargs": {"default": None}},
             {"names": ["--rmlst_path"], "kwargs": {"default": None}},
             {"names": ["--shovill_path"], "kwargs": {"default": None}},

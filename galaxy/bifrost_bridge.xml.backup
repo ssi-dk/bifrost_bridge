@@ -1,0 +1,105 @@
+<tool id="bifrost_bridge" name="Bifrost Bridge" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" python_template_version="3.5" profile="21.05">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        
+        bridge_qc \
+        #if $mlst_output:
+            --mlst_path '$mlst_output' \
+        #end if
+        #if $fastp_output:
+            --fastp_path '$fastp_output' \
+        #end if
+        #if $quast_output:
+            --quast_path '$quast_output' \
+        #end if
+        #if $plasmidfinder_output:
+            --plasmidfinder_path '$plasmidfinder_output' \
+        #end if
+        #if $bracken_output:
+            --bracken_path '$bracken_output' \
+        #end if
+        #if $amrfinder_output:
+            --amrfinder_path '$amrfinder_output' \
+        #end if
+        #if $amrfinder_version_output:
+            --amrfinder_version_path '$amrfinder_version_output' \
+        #end if
+        #if $pmlst_output:
+            --pmlst_path '$pmlst_output' \
+        #end if
+	#if $rmlst_output:
+	    --rmlst_path '$rmlst_output' \
+	#end if
+	#if $ssiamb_output:
+	    --ssiamb_path '$ssiamb_output' \
+        #end if
+        #if $shovill_output:
+            --shovill_path '$shovill_output' \
+	#end if
+        --output_path qc_output.tsv &&
+
+        mkdir -p config &&
+        ln -s '$__tool_directory__/config/mapping.yaml' config/mapping.yaml &&
+        ln -s '$__tool_directory__/config/QC_rules.tsv' config/QC_rules.tsv &&
+        ln -s '$__tool_directory__/config/QC_tests.tsv' config/QC_tests.tsv &&
+
+        uqcme \
+        --config '$__tool_directory__/config/config.yaml' \
+        --file qc_output.tsv
+    
+    ## Outputs
+    
+    ]]></command>
+
+    <inputs>
+        <param type="data" name="mlst_output" format="tsv,tabular" optional="true" label="mlst output file"/>
+        <param type="data" name="fastp_output" format="json" optional="true" label="fastp output file"/>
+        <param type="data" name="quast_output" format="tsv,tabular" optional="true" label="quast output file"/>
+        <param type="data" name="plasmidfinder_output" format="tsv,tabular" optional="true" label="plasmidfinder output file"/>
+        <param type="data" name="bracken_output" format="tsv,tabular" optional="true" label="bracken output file"/>
+        <param type="data" name="amrfinder_output" format="tsv,tabular" optional="true" label="amrfinder output file"/>
+	<param type="data" name="amrfinder_version_output" format="tsv,tabular" optional="true" label="amrfinder version file"/>
+	<param type="data" name="pmlst_output" format="tsv,tabular" optional="true" label="pmlst output file"/>
+	<param type="data" name="rmlst_output" format="json" optional="true" label="rmlst output file"/>
+        <param type="data" name="ssiamb_output" format="tsv,tabular" optional="true" label="ssiamb output file"/>
+        <param type="data" name="shovill_output" format="txt" optional="true" label="shovill log file"/>
+    </inputs>
+    
+    <outputs>
+        <data name="log_file" format="txt" from_work_dir="uqcme.log" label="uQCme log" />
+        <data name="combined_output" format="tsv" from_work_dir="output.tsv" label="Combined output tsv" />
+    </outputs>
+
+    <help><![CDATA[
+usage: bridge_qc [-h] [--mlst_path MLST_PATH] [--fastp_path FASTP_PATH] [--quast_path QUAST_PATH] [--plasmidfinder_path PLASMIDFINDER_PATH] [--bracken_path BRACKEN_PATH] [--amrfinder_path AMRFINDER_PATH]
+                 [--pmlst_path PMLST_PATH] [--ssiamb_path SSIAMB_PATH] [--shovil_path SHOVILL_PATHH] [--combine_output] [--output_path OUTPUT_PATH]
+
+Command-line interface for processing QC data. This function processes MLST, FASTP, QUAST, PlasmidFinder, and Bracken data files based on the provided command-line arguments. It supports specifying input file
+paths for MLST, FASTP, QUAST, PlasmidFinder, and Bracken data, and outputs the processed data to specified paths. Arguments: mlst_path (str): Path to the MLST input file. fastp_path (str): Path to the FASTP input
+file. quast_path (str): Path to the QUAST input file. plasmidfinder_path (str): Path to the PlasmidFinder input file. bracken_path (str): Path to the Bracken input file. amrfinder_path (str): Path to the
+AMRFinder input file. pmlst_path (str): Path to the PMLST input file. output_path (str): Path to the output file (default: './output.tsv').
+
+options:
+-h, --help                               show this help message and exit
+--mlst_path MLST_PATH
+--fastp_path FASTP_PATH
+--quast_path QUAST_PATH
+--plasmidfinder_path PLASMIDFINDER_PATH
+--bracken_path BRACKEN_PATH
+--amrfinder_path AMRFINDER_PATH
+--amrfinder_version_path AMRFINDER_VERSION_PATH
+--pmlst_path PMLST_PATH
+--rmlst_path RMLST_PATH
+--ssiamb_path SSIAMB_PATH
+--shovil_path SHOVILL_PATH
+--combine_output                         (default: False)
+--output_path OUTPUT_PATH                (default: ./output.tsv)
+
+
+
+    ]]></help>
+
+</tool>

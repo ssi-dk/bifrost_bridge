@@ -1,0 +1,12 @@
+categories:
+    - Sequence Analysis
+description: Normalize and evaluate microbial bioinformatics quality-control results
+homepage_url: https://github.com/ssi-dk/bifrost_bridge
+long_description: |
+    Bifrost Bridge converts outputs from supported microbial bioinformatics
+    tools into a normalized tabular summary and uses uQCme to evaluate the
+    resulting metrics against configurable quality-control rules.
+remote_repository_url: https://github.com/ssi-dk/bifrost_bridge
+name: bifrost_bridge
+owner: iuc
+type: unrestricted

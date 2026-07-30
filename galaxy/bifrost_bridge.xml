@@ -1,105 +1,168 @@
-<tool id="bifrost_bridge" name="Bifrost Bridge" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" python_template_version="3.5" profile="21.05">
+<tool id="bifrost_bridge" name="Bifrost Bridge" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.0">
+    <description>normalizes bioinformatics results and evaluates microbial quality-control rules</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements" />
-    <command detect_errors="exit_code"><![CDATA[
-        
-        bridge_qc \
-        #if $mlst_output:
-            --mlst_path '$mlst_output' \
-        #end if
-        #if $fastp_output:
-            --fastp_path '$fastp_output' \
-        #end if
-        #if $quast_output:
-            --quast_path '$quast_output' \
-        #end if
-        #if $plasmidfinder_output:
-            --plasmidfinder_path '$plasmidfinder_output' \
-        #end if
-        #if $bracken_output:
-            --bracken_path '$bracken_output' \
-        #end if
-        #if $amrfinder_output:
-            --amrfinder_path '$amrfinder_output' \
-        #end if
-        #if $amrfinder_version_output:
-            --amrfinder_version_path '$amrfinder_version_output' \
-        #end if
-        #if $pmlst_output:
-            --pmlst_path '$pmlst_output' \
-        #end if
-	#if $rmlst_output:
-	    --rmlst_path '$rmlst_output' \
-	#end if
-	#if $ssiamb_output:
-	    --ssiamb_path '$ssiamb_output' \
-        #end if
-        #if $shovill_output:
-            --shovill_path '$shovill_output' \
-	#end if
-        --output_path qc_output.tsv &&
-
-        mkdir -p config &&
-        ln -s '$__tool_directory__/config/mapping.yaml' config/mapping.yaml &&
-        ln -s '$__tool_directory__/config/QC_rules.tsv' config/QC_rules.tsv &&
-        ln -s '$__tool_directory__/config/QC_tests.tsv' config/QC_tests.tsv &&
-
-        uqcme \
-        --config '$__tool_directory__/config/config.yaml' \
-        --file qc_output.tsv
-    
-    ## Outputs
-    
+    <expand macro="requirements"/>
+    <expand macro="version_command"/>
+    <command detect_errors="aggressive"><![CDATA[
+#if not any([$mlst_output, $fastp_output, $quast_output, $plasmidfinder_output, $bracken_output, $amrfinder_output, $pmlst_output, $rmlst_output, $ssiamb_output, $shovill_output]):
+    echo 'At least one QC result input must be supplied.' >&2 &&
+    exit 1
+#else:
+    bridge_qc
+    #if $mlst_output:
+        --mlst_path '$mlst_output'
+    #end if
+    #if $fastp_output:
+        --fastp_path '$fastp_output'
+    #end if
+    #if $quast_output:
+        --quast_path '$quast_output'
+    #end if
+    #if $plasmidfinder_output:
+        --plasmidfinder_path '$plasmidfinder_output'
+    #end if
+    #if $bracken_output:
+        --bracken_path '$bracken_output'
+    #end if
+    #if $amrfinder_output:
+        --amrfinder_path '$amrfinder_output'
+    #end if
+    #if $pmlst_output:
+        --pmlst_path '$pmlst_output'
+    #end if
+    #if $rmlst_output:
+        --rmlst_path '$rmlst_output'
+    #end if
+    #if $ssiamb_output:
+        --ssiamb_path '$ssiamb_output'
+    #end if
+    #if $shovill_output:
+        --shovill_path '$shovill_output'
+    #end if
+        --output_path '$normalized_output' &&
+    uqcme --config '$uqcme_config'
+#end if
     ]]></command>
-
+    <configfiles>
+        <configfile name="uqcme_config"><![CDATA[
+title: "Bifrost Bridge microbial QC"
+version: "@UQCME_VERSION@"
+qc:
+  input:
+    data:
+      file: '${normalized_output}'
+    mapping: '${__tool_directory__}/config/mapping.yaml'
+    qc_rules: '${__tool_directory__}/config/QC_rules.tsv'
+    qc_tests: '${__tool_directory__}/config/QC_tests.tsv'
+  output:
+    results: '${qc_results}'
+    warnings: '${qc_warnings}'
+log:
+  file: '${log_file}'
+        ]]></configfile>
+    </configfiles>
     <inputs>
-        <param type="data" name="mlst_output" format="tsv,tabular" optional="true" label="mlst output file"/>
-        <param type="data" name="fastp_output" format="json" optional="true" label="fastp output file"/>
-        <param type="data" name="quast_output" format="tsv,tabular" optional="true" label="quast output file"/>
-        <param type="data" name="plasmidfinder_output" format="tsv,tabular" optional="true" label="plasmidfinder output file"/>
-        <param type="data" name="bracken_output" format="tsv,tabular" optional="true" label="bracken output file"/>
-        <param type="data" name="amrfinder_output" format="tsv,tabular" optional="true" label="amrfinder output file"/>
-	<param type="data" name="amrfinder_version_output" format="tsv,tabular" optional="true" label="amrfinder version file"/>
-	<param type="data" name="pmlst_output" format="tsv,tabular" optional="true" label="pmlst output file"/>
-	<param type="data" name="rmlst_output" format="json" optional="true" label="rmlst output file"/>
-        <param type="data" name="ssiamb_output" format="tsv,tabular" optional="true" label="ssiamb output file"/>
-        <param type="data" name="shovill_output" format="txt" optional="true" label="shovill log file"/>
+        <param name="mlst_output" argument="--mlst_path" type="data" format="tabular" optional="true" label="MLST results" help="Tabular output produced by MLST."/>
+        <param name="fastp_output" argument="--fastp_path" type="data" format="json" optional="true" label="fastp results" help="JSON report produced by fastp."/>
+        <param name="quast_output" argument="--quast_path" type="data" format="tabular" optional="true" label="QUAST results" help="Transposed report.tsv output produced by QUAST."/>
+        <param name="plasmidfinder_output" argument="--plasmidfinder_path" type="data" format="tabular" optional="true" label="PlasmidFinder results" help="Tabular results produced by PlasmidFinder."/>
+        <param name="bracken_output" argument="--bracken_path" type="data" format="tabular" optional="true" label="Bracken/Kraken report" help="Kraken-style report containing unclassified and species-level rows."/>
+        <param name="amrfinder_output" argument="--amrfinder_path" type="data" format="tabular" optional="true" label="AMRFinderPlus results" help="Tabular results produced by AMRFinderPlus."/>
+        <param name="pmlst_output" argument="--pmlst_path" type="data" format="tabular" optional="true" label="pMLST results" help="Normalized pMLST tabular results."/>
+        <param name="rmlst_output" argument="--rmlst_path" type="data" format="tabular" optional="true" label="rMLST results" help="Normalized tabular output produced by the Galaxy rMLST tool."/>
+        <param name="ssiamb_output" argument="--ssiamb_path" type="data" format="tabular" optional="true" label="SSI ambiguous-SNV results" help="Tabular ambiguous SNV count produced by SSIAMB."/>
+        <param name="shovill_output" argument="--shovill_path" type="data" format="txt" optional="true" label="Shovill log" help="Shovill log containing the average-coverage message."/>
     </inputs>
-    
     <outputs>
-        <data name="log_file" format="txt" from_work_dir="uqcme.log" label="uQCme log" />
-        <data name="combined_output" format="tsv" from_work_dir="output.tsv" label="Combined output tsv" />
+        <data name="normalized_output" format="tabular" label="${tool.name} on ${on_string}: normalized metrics"/>
+        <data name="qc_results" format="tabular" label="${tool.name} on ${on_string}: QC results"/>
+        <data name="qc_warnings" format="tabular" label="${tool.name} on ${on_string}: QC warnings"/>
+        <data name="log_file" format="txt" label="${tool.name} on ${on_string}: uQCme log"/>
     </outputs>
-
+    <tests>
+        <test expect_num_outputs="4">
+            <param name="mlst_output" value="mlst.tsv"/>
+            <output name="normalized_output" file="mlst_normalized.tsv"/>
+            <output name="qc_results">
+                <assert_contents>
+                    <has_text text="MLST_Species"/>
+                    <has_text text="ecoli_achtman_4"/>
+                    <has_text text="qc_outcome"/>
+                </assert_contents>
+            </output>
+            <output name="qc_warnings">
+                <assert_contents>
+                    <has_line_matching expression="warning_type\twarning_message\ttimestamp"/>
+                </assert_contents>
+            </output>
+            <output name="log_file">
+                <assert_contents>
+                    <has_size min="1"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="4">
+            <param name="rmlst_output" value="rmlst.tabular"/>
+            <output name="normalized_output">
+                <assert_contents>
+                    <has_text text="rMLST_support"/>
+                    <has_text text="Clostridioides difficile"/>
+                </assert_contents>
+            </output>
+            <output name="qc_results">
+                <assert_contents>
+                    <has_text text="Clostridioides difficile"/>
+                    <has_text text="qc_outcome"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="4">
+            <param name="amrfinder_output" value="amrfinderplus.tsv"/>
+            <output name="normalized_output">
+                <assert_contents>
+                    <has_text text="AMR_dbv_toolv"/>
+                    <has_text text="2026-05-15.1,4.2.7"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
-usage: bridge_qc [-h] [--mlst_path MLST_PATH] [--fastp_path FASTP_PATH] [--quast_path QUAST_PATH] [--plasmidfinder_path PLASMIDFINDER_PATH] [--bracken_path BRACKEN_PATH] [--amrfinder_path AMRFINDER_PATH]
-                 [--pmlst_path PMLST_PATH] [--ssiamb_path SSIAMB_PATH] [--shovil_path SHOVILL_PATHH] [--combine_output] [--output_path OUTPUT_PATH]
+Bifrost Bridge
+==============
 
-Command-line interface for processing QC data. This function processes MLST, FASTP, QUAST, PlasmidFinder, and Bracken data files based on the provided command-line arguments. It supports specifying input file
-paths for MLST, FASTP, QUAST, PlasmidFinder, and Bracken data, and outputs the processed data to specified paths. Arguments: mlst_path (str): Path to the MLST input file. fastp_path (str): Path to the FASTP input
-file. quast_path (str): Path to the QUAST input file. plasmidfinder_path (str): Path to the PlasmidFinder input file. bracken_path (str): Path to the Bracken input file. amrfinder_path (str): Path to the
-AMRFinder input file. pmlst_path (str): Path to the PMLST input file. output_path (str): Path to the output file (default: './output.tsv').
+Bifrost Bridge converts outputs from supported microbial bioinformatics tools
+into a single, one-row tabular summary. It then runs uQCme to evaluate the
+normalized metrics against configurable quality-control rules.
 
-options:
--h, --help                               show this help message and exit
---mlst_path MLST_PATH
---fastp_path FASTP_PATH
---quast_path QUAST_PATH
---plasmidfinder_path PLASMIDFINDER_PATH
---bracken_path BRACKEN_PATH
---amrfinder_path AMRFINDER_PATH
---amrfinder_version_path AMRFINDER_VERSION_PATH
---pmlst_path PMLST_PATH
---rmlst_path RMLST_PATH
---ssiamb_path SSIAMB_PATH
---shovil_path SHOVILL_PATH
---combine_output                         (default: False)
---output_path OUTPUT_PATH                (default: ./output.tsv)
+At least one input must be supplied. Inputs are optional individually so that
+the wrapper can be used with whichever analyses are available for a sample.
 
+Outputs
+-------
 
+**Normalized metrics**
+    The combined one-row table generated by ``bridge_qc``.
 
+**QC results**
+    The normalized table with uQCme outcomes and rule-evaluation columns.
+
+**QC warnings**
+    Warnings produced while loading or evaluating quality-control rules.
+
+**uQCme log**
+    Detailed processing messages from uQCme.
+
+Multiple hits from tools such as AMRFinderPlus and PlasmidFinder are collapsed
+within a field using ``|`` as a separator.
+
+The AMRFinderPlus database and tool versions are read directly from its result
+report and exposed together as ``AMR_dbv_toolv``.
+
+The bundled QC rules are maintained by Statens Serum Institut. Results should
+be interpreted together with the laboratory's validated procedures and the
+versions of the contributing analysis tools.
     ]]></help>
-
+    <expand macro="citations"/>
 </tool>
