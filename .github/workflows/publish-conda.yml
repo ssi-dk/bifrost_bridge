@@ -61,6 +61,19 @@ jobs:
           echo "ERROR: PyPI release bifrost_bridge==$VERSION was not available after 10 minutes"
           exit 1
 
+      - name: Update Conda source checksum
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          SHA256=$(python -c 'import json, os, urllib.request; data = json.load(urllib.request.urlopen(f"https://pypi.org/pypi/bifrost_bridge/{os.environ[\"VERSION\"]}/json", timeout=15)); print(next(item["digests"]["sha256"] for item in data["urls"] if item.get("packagetype") == "sdist"))')
+          if [[ ! "$SHA256" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "ERROR: Invalid PyPI sdist SHA256: $SHA256"
+            exit 1
+          fi
+          sed -i "s/^  sha256: .*/  sha256: $SHA256/" conda/meta.yaml
+          echo "Using PyPI sdist SHA256: $SHA256"
+
       - name: Build conda package
         shell: bash -el {0}
         env:
