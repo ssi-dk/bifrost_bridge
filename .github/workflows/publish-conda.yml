@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ["Publish to PyPI"]
     types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,28 +15,37 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       ${{
-        github.event.workflow_run.conclusion == 'success' &&
-        github.event.workflow_run.event == 'push'
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'push'
+        )
       }}
 
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 0
 
-      - name: Set up Miniconda
+      - name: Set up Miniforge
         uses: conda-incubator/setup-miniconda@v4
         with:
-          auto-update-conda: true
+          miniforge-version: latest
+          activate-environment: conda-build-env
           python-version: "3.11"
-          channels: ssi-dk,bioconda,conda-forge
+          channels: conda-forge
           channel-priority: strict
+          conda-solver: libmamba
 
       - name: Install conda packaging tools
         shell: bash -el {0}
         run: |
-          conda install -y conda-build conda-libmamba-solver anaconda-client
+          conda install -y \
+            --override-channels \
+            --channel conda-forge \
+            conda-build \
+            anaconda-client
 
       - name: Read version
         id: version
@@ -80,9 +90,9 @@ jobs:
           CONDA_SOLVER: libmamba
         run: |
           conda build conda \
-            --channel ssi-dk \
-            --channel bioconda \
             --channel conda-forge \
+            --channel bioconda \
+            --channel ssi-dk \
             --no-anaconda-upload \
             --output-folder ./conda-bld
 
