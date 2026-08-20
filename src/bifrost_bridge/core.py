@@ -7,13 +7,23 @@ import pandas as pd
 import yaml
 
 
+def stringify_non_null_values(value):
+    if isinstance(value, dict):
+        return {key: stringify_non_null_values(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [stringify_non_null_values(item) for item in value]
+    if value is None:
+        return None
+    return str(value)
+
+
 class DataFrame:
     def __init__(self, data=None):
         self.df = pd.DataFrame(data) if data is not None else pd.DataFrame()
 
     def import_nested_json_data(self, json_file_path: str | Path) -> None:
         with Path(json_file_path).open("r", encoding="utf-8") as file:
-            nested_json = json.load(file)
+            nested_json = stringify_non_null_values(json.load(file))
 
         def flatten_json(obj, prefix=""):
             out = {}
@@ -120,24 +130,36 @@ class DataFrame:
         if isinstance(add_header, str) and add_header:
             add_header = add_header.replace(" ", "").split(",")
 
+        read_csv_kwargs = {
+            "dtype": str,
+        }
+
         if file_type == "csv":
             self.df = pd.read_csv(
-                path, delimiter=",", header=None if add_header else 0, index_col=False
+                path,
+                delimiter=",",
+                header=None if add_header else 0,
+                index_col=False,
+                **read_csv_kwargs,
             )
             if len(self.df) == 0:
-                self.df = pd.read_csv(path, delimiter=",", header=None)
+                self.df = pd.read_csv(path, delimiter=",", header=None, **read_csv_kwargs)
         elif file_type == "tsv":
             self.df = pd.read_csv(
-                path, delimiter="\t", header=None if add_header else 0, index_col=False
+                path,
+                delimiter="\t",
+                header=None if add_header else 0,
+                index_col=False,
+                **read_csv_kwargs,
             )
             if len(self.df) == 0:
-                self.df = pd.read_csv(path, delimiter="\t", header=None)
+                self.df = pd.read_csv(path, delimiter="\t", header=None, **read_csv_kwargs)
         elif file_type == "json":
             self.import_nested_json_data(path)
             return
         elif file_type == "yaml":
             with path.open("r", encoding="utf-8") as file:
-                self.df = pd.json_normalize(yaml.safe_load(file))
+                self.df = pd.json_normalize(stringify_non_null_values(yaml.safe_load(file)))
             return
         elif file_type == "xml":
             self.import_nested_xml_data(path)

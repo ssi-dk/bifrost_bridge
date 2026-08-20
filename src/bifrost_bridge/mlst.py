@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from bifrost_bridge.cli import build_parser
 from bifrost_bridge import core
+from bifrost_bridge.cli import build_parser
 
 
 def process_mlst_data(
@@ -20,9 +20,7 @@ def process_mlst_data(
     df = core.DataFrame()
     df.import_data(input_file, file_type="tsv")
 
-    if df.df.isna().iloc[0, 0]:
-        mlst_is_empty = True
-    elif df.df.iloc[0, 1] == "-":
+    if df.df.isna().iloc[0, 0] or df.df.iloc[0, 1] == "-":
         mlst_is_empty = True
     else:
         mlst_is_empty = False

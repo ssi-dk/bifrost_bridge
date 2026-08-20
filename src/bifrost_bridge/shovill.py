@@ -1,8 +1,8 @@
 import re
 from pathlib import Path
 
-from bifrost_bridge.cli import build_parser
 from bifrost_bridge import core
+from bifrost_bridge.cli import build_parser
 
 
 def process_shovill_data(

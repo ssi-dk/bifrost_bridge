@@ -1,8 +1,8 @@
 import re
 from pathlib import Path
 
-from bifrost_bridge.cli import build_parser
 from bifrost_bridge import core
+from bifrost_bridge.cli import build_parser
 
 
 def process_plasmidfinder_data(
@@ -33,10 +33,7 @@ def process_plasmidfinder_data(
         for part in parts:
             if "/" in part:
                 num, denom = part.split("/")
-                try:
-                    results.append(str(float(num.strip()) / float(denom.strip()) * 100))
-                except Exception:
-                    results.append(part)
+                results.append(str(float(num.strip()) / float(denom.strip()) * 100))
             else:
                 results.append(part)
         return ",".join(results)

@@ -61,6 +61,7 @@ def test_quast_transposes_output(tmp_path: Path) -> None:
     df = read_tsv(output_path)
     assert df.columns.tolist() == ["# contigs", "Largest contig", "Total length"]
     assert int(df.iloc[0]["# contigs"]) == 365
+    assert output_path.read_text(encoding="utf-8").splitlines()[1].split("\t")[0] == "365"
 
 
 def test_plasmidfinder_converts_coverage_and_contig(tmp_path: Path) -> None:
