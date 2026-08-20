@@ -19,6 +19,7 @@ def process_bracken_data(
 
     df = core.DataFrame()
     df.import_data(input_file, file_type="tsv", add_header=add_header)
+    df.df["%ofreads"] = pd.to_numeric(df.df["%ofreads"])
     df.df = pd.concat(
         [
             df.df[df.df["rank"] == "U"],
