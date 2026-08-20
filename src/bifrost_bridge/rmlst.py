@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from bifrost_bridge.cli import build_parser
 from bifrost_bridge import core
+from bifrost_bridge.cli import build_parser
 
 
 def process_rmlst_data(
